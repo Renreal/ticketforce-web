@@ -440,7 +440,7 @@ display: none;
     flex-direction: column;
     align-items: center;
     text-transform: uppercase;
-    width: -webkit-fill-available;
+   
     align-content: center;
     justify-content: center;
     text-align: center;
@@ -451,7 +451,7 @@ display: none;
     border-color: transparent;
     padding: 0.5rem;
     margin: 5px;
-    width: 60%;
+    width: max-content;
     color: rgb(0, 0, 0);
     font-weight: bold;
 }
@@ -463,6 +463,7 @@ display: none;
 #searchResults .divider{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 #popup{
