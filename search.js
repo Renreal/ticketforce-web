@@ -87,7 +87,11 @@ function displayResult(data) {
         <img src="${data.imageDownloadURL}" alt="Enforcer Image" width="100"><br>
         <p>Name: ${data.firstname} ${data.lastname} </p>
         <p>ID No.: ${data.ID}</p>
-        <button class="view-button" data-id="${data.ID}">MODIFY</button>
+        <div class="divider">
+        <button class="viewBtn" data-id="${data.ID}">MODIFY</button>
+        <button class="btnDelete" data-id="${data.ID}">DELETE</button>    
+        </div>
+        
     `;
     searchResults.appendChild(resultElement);
 }
@@ -96,7 +100,7 @@ function displayResult(data) {
 
 
 searchResults.addEventListener("click", (e) => {
-    if (e.target.classList.contains("view-button")) {
+    if (e.target.classList.contains("viewBtn")) {
         const id = e.target.getAttribute("data-id");
         
         // Redirect to enforcerProfile.html with the ID as a query parameter

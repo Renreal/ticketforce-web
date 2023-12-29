@@ -452,8 +452,18 @@ display: none;
     padding: 0.5rem;
     margin: 5px;
     width: 60%;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+#searchResults .btnDelete{
+  background-color: red;
+  color: aliceblue;
 }
 
+#searchResults .divider{
+    display: flex;
+    flex-direction: row;
+}
 
 
 
@@ -771,6 +781,14 @@ p.title{
     justify-content: space-around;
     align-items: center;
 }
+.subcon i{
+    color: red;
+}
+.subcon i:hover{
+    background-color: white;
+    padding: 0.2rem;
+    border-radius: 3rem;
+}
 #resContainer{
     margin-top: 1rem;
     height: 50vh;
@@ -786,6 +804,7 @@ p.title{
     margin: 0.5rem;
     font-size: 2rem;
 }
+
 /* media query for responsiveness  */
 
 

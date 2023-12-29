@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ticket force</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <link rel="icon" href="logo.png">
+<body>
+<div id="main">
+              <div id="mySidebar" class="sidebar">
+                  <span class="closebtn" onclick="closeNav()">×</span>
+                  <img src="personIcon.svg">
+                  <p id="userName"></p>
+                  <p id="role"></p>
+
+                  <a href="home.html" class="home">HOME</a> 
+
+                  <a href="#" class="dropdown">ENFORCER PROFILE<img src="dropdown.png"></a>
+                    <ul id="dropdownMenu">
+                      <li><a class="dropdown-item" href="register.html">Register</a></li>
+                      <li><a class="dropdown-item" href="modify.html">Modify</a></li>
+                      <li><a class="dropdown-item" href="search.html">Search Account</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                    </ul>
+
+                    
+                  <a href="#" class="dropdown2">VIOLATIONS<img src="dropdown.png"></a>
+                    <ul id="dropdownMenu2">
+                      <li><a class="dropdown-item" href="addVio.html">Add</a></li>
+                      <li><a class="dropdown-item" href="editvio.html">Edit</a></li>
+                      <li><a class="dropdown-item" href="deleteVio.html">Delete</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                    </ul>
+                   
+                  
+                  <a href="report.html">REPORT</a>
+                </div>
+              <div class="nav-bar">
+                  <button class="openbtn" onclick="openNav()">☰</button>
+                  <img src="logo.png" class="logo"> 
+                  
+                  <div class="span">
+                    <img src="icon.svg" class="icon">
+                    <button id="logoutButton">Logout</button>
+                  </div>  
+              </div>
+
+              <div class="eWrapper">
+                
+                <div class="eSearch">
+                    <span class="title">REMOVE VIOLATION</span>
+                    
+                    <div class="searchBar">
+                    <input type="text" id="vSearch">
+                    <i class="fa fa-search"></i>
+                    </div>
+                        
+                </div>
+                
+
+              <div id="resContainer">
+                
+              <!--   <div class="sResults">
+                        <p id="vType">Beating the red light</p>
+                        <div class="subcon">
+                            <p id="price">P1000</p>
+                            <i class="fa fa-search"></i>
+                        </div>           
+                  </div> -->
+                 
+              </div>
+                   
+                
+            
+              </div>
+
+
+</div>
+            
+            
+
+<script src="sidebar.js"></script>
+<script type="module" src="router.js"></script>
+<script type="module" src="deleteVio.js"></script>
+
+</body>
+</html> 
