@@ -97,6 +97,23 @@ function displayResult(data) {
 }
 
 
+ //show modal when check icon is clicked
+ function showModal() {
+    document.getElementById('popup').style.display = 'block';   
+}
+
+// Function to hide the modal 
+function hideModal() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+//cancel button
+document.getElementById('btnCancel').addEventListener('click', () => {
+  hideModal();
+});
+
+
+
 
 
 searchResults.addEventListener("click", (e) => {
@@ -105,6 +122,10 @@ searchResults.addEventListener("click", (e) => {
         
         // Redirect to enforcerProfile.html with the ID as a query parameter
         window.location.href = `enforcerProfile.html?id=${id}`;
+    }
+    else if (e.target.classList.contains("btnDelete")) {
+        showModal();
+       
     }
 });
 
