@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ticket force</title>
+  <link rel="stylesheet" href="home.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+</head>
+
+<body>
+ <div id="main">
+    <div id="mySidebar" class="sidebar">
+        <span class="closebtn" onclick="closeNav()">×</span>
+        <img src="personIcon.svg">
+        <p id="userName"></p>
+        <p id="role">CASHIER</p>
+
+        <a href="C_Home.html" class="home">HOME</a> 
+        <a href="drivers.html" >DRIVERS</a> 
+        <a href="transactions.html">TRANSACTION</a> 
+        <a href="#">REPORT</a>
+      </div>
+      <div class="nav-bar">
+        <button class="openbtn" onclick="openNav()">☰</button>
+        <img src="logo.png" class="logo"> 
+        
+        <div class="span">
+           <img src="icon.svg" class="icon">
+           <button id="logoutButton">Logout</button>
+        </div>
+    </div>
+
+
+    <div class="Tcontainer">
+      <p class="title">TRANSACTIONS</p>
+      <div class="Tdata">
+       <a><img src="envelope.jpg" alt="envelope icon"><p class="status">John doe has paid 2,600</p></a> 
+        <div class="dateTime">
+          <p class="Tdate">date</p>
+          <p class="Ttime">time</p>
+        </div>
+      </div>
+    </div>
+
+
+ 
+  <script src="sidebar.js"></script>
+  <script src="dataChart.js"></script>
+  
+<script type="module" src="FirebaseConfig.js"></script>
+<script type="module" src="router.js"></script>
+</body>
+</html>
+

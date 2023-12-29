@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ticket force</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+</head>
+<body>
+<div id="main">
+                  <div id="mySidebar" class="sidebar">
+                    <span class="closebtn" onclick="closeNav()">×</span>
+                    <img src="personIcon.svg">
+                    <p id="userName"></p>
+                    <p id="role">CASHIER</p>
+  
+                    <a href="C_Home.html" class="home">HOME</a> 
+                    <a href="drivers.html" >DRIVERS</a> 
+                    <a href="transactions.html">TRANSACTION</a> 
+                    <a href="#">REPORT</a>
+                  </div>
+
+
+                <div class="nav-bar">
+                    <button class="openbtn" onclick="openNav()">☰</button>
+                    <img src="logo.png" class="logo"> 
+                    
+                    <div class="span">
+                      <img src="icon.svg" class="icon">
+                      <button id="logoutButton">Logout</button>
+                    </div>
+                </div>
+    
+
+              <div class="rWrapper">
+                 <div class="registerWrapper">
+                  <span class="modify">SEARCH DRIVER</span>
+                  <div class="searchContainer">
+                    <input type="text" placeholder="SEARCH LICENSE NUMBER" class="search" id="searchInput">
+                    <button onclick="searchEnforcers()"><i class="fa fa-search"></i></button>  
+                  </div>
+                  <div class="searchResults" id="searchResults">
+                    <p></p>
+                  </div>
+                  </div>
+              </div>
+             
+
+
+              <div class="vioContainer">
+                <div class="VioRecords">
+                        <div class="vHeader">
+                          <p class="name">John Doe</p>
+                          <div class="vHeader2">
+                            <p class="date">date</p> 
+                          <span>X</span> 
+                          </div>
+                          </div>
+                        <ul class="records">
+                          <li>violation 1</li>
+                          <li>violation 2</li>
+                          <li>violation 3</li>
+                        </ul>
+                </div>              
+              </div>
+                
+  </div>
+
+<script type="module" src="cashierSearchView.js"></script>
+<script type="module" src="router.js"></script>
+<script src="sidebar.js"></script>
+
+</body>
+</html> 

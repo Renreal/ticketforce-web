@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*{  
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    background: url("bg2.png");  
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+.arrowBck img{
+    
+    position: absolute;
+    top: 0;
+    margin: 1rem;
+    width: 3.5rem;
+}
+.arrowBck img:hover{
+    background-color:#ffff0030;
+}
+.wrapper{
+    margin: 5vh 10vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.logo img{
+width: 25vh;
+}
+
+.logoTitle{
+   
+    display: grid;
+    justify-items: center;
+    font-size: 3.5vh;
+}
+
+.form{
+    
+    margin-top: 2rem;
+    background-color: #e6ebf0f2;
+    padding: 2rem;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: baseline;
+    border-radius: 2rem;
+
+}
+.form input{
+   
+    background-color: #c2e0fb4d;
+    border: none;
+    border-radius: 10rem;
+    width: -webkit-fill-available;
+    padding: 1em;
+    margin: .5rem;
+    font-size: large;
+}
+button{
+    background-color: #ffff0069;
+    border: none;
+    font-size: large;
+    width: 30vh;
+    padding: 2vh;
+    margin: 0 5vh;
+    margin-top: 2rem;
+    margin-bottom: 1.2rem;
+}
+button:hover{
+    text-decoration: underline;
+}
+span{
+    font-size: 2vh;
+    margin: 0 auto;
+    display: table;
+}
+span:hover{
+    text-decoration: underline;
+}

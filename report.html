@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+  <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <title>ticket force</title>
+  <link rel="icon" href="logo.png">
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>  
+<div id="main">             
+    <div id="mySidebar" class="sidebar">
+                  <span class="closebtn" onclick="closeNav()">×</span>
+                  <img src="personIcon.svg">
+                  <p id="userName"></p>
+                  <p>ADMIN</p>
+                  <a href="home.html" class="home">HOME</a> 
+                  <a href="#" class="dropdown">ENFORCER PROFILE<img src="dropdown.png"></a>
+                    <ul id="dropdownMenu">
+                      <li><a class="dropdown-item" href="register.html">Register</a></li>
+                      <li><a class="dropdown-item" href="modify.html">Modify</a></li>
+                      <li><a class="dropdown-item" href="search.html">Search Account</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                    </ul>
+                    
+                    <a href="#" class="dropdown2">VIOLATIONS<img src="dropdown.png"></a>
+                    <ul id="dropdownMenu2">
+                      <li><a class="dropdown-item" href="addVio.html">Add</a></li>
+                      <li><a class="dropdown-item" href="editvio.html">Edit</a></li>
+                      <li><a class="dropdown-item" href="deleteVio.html">Delete</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                    </ul>
+                 <a href="report.html">REPORT</a>
+                </div>
+
+    <div class="nav-bar">
+                    <button class="openbtn" onclick="openNav()">☰</button>
+                    <img src="logo.png" class="logo"> 
+                    
+                    <div class="span">
+                    <img src="icon.svg" class="icon">
+                    <button id="logoutButton">Logout</button>
+                    </div>
+                </div>
+                
+
+
+
+    <div class="registerWrapper">        
+           
+      <span>MONTHLY REVENUE REPORT</span>
+         
+      <div class="table-container">
+                <div class="header">
+                 <div class="dateContainer">
+                   <img src="calendar.png" alt="">
+                  <p class="date">from</p>
+                  <input class="calendarInput" id="flatpickrInput" onclick="openCalendar()" type="text" readonly>
+                  <p class="date">to</p>
+                  <input class="calendarInput" id="flatpickrInput2" onclick="openCalendar()" type="text" readonly>
+                 </div>
+                 
+                  <div class="printbtn">
+                    <img src="pdfIcon.png" alt="">
+                  <button id="print" class="print">PRINT</button>
+                  </div>                    
+                </div>
+                  <table id="tableBody">
+                    <tr class="tableHeader">
+                      <th>DATE</th>
+                      <th>ENFORCER</th>
+                      <th>VIOLATION</th>
+                      <th>VIOLATION FEE</th>
+                      <th>DATE OF PAYMENT</th>
+                      <th>COLLECTED FEE</th>
+                      <th>REMARKS</th>
+                    </tr>
+                    <tr class="tableData">
+                    <td>null</td>
+                    <td>null</td>
+                    <td>null</td>
+                    <td>null</td>
+                    <td>null</td>
+                    <td>null</td>
+                    <td>null</td>
+                    </tr>
+                  </table>
+            </div>
+      </div>
+                       
+</div>
+
+<script type="module" src="FirebaseConfig.js"></script>
+<script type="module" src="router.js"></script>
+<script src="sidebar.js"></script>
+<script src="calendar.js"></script>
+</body>
+</html> 
