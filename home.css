@@ -333,6 +333,27 @@ i{
     width: 30vw;
     font-size: 17px;
 }
+.searchViewinputBox{
+    background-color: transparent;
+    width: min-content;
+    padding: 20px;
+}
+.searchViewinputBox input{
+    text-transform: uppercase;
+    border-radius: 20px;
+    border-color: transparent;
+    background: #afb1b3c4;
+    color: black;
+    padding: 12px;
+    margin: 10px;
+    width: 30vw;
+    font-size: 17px;
+    cursor: not-allowed;
+}
+.searchViewinputBox input[readonly] {
+    background: #dcdcdc; /* Change background color for read-only inputs */
+    cursor: not-allowed; /* Change cursor style for read-only inputs */
+  }
 
 .custom{
     background-color: #feffcc;
