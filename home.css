@@ -535,6 +535,9 @@ display: none;
     font-weight: bold;
 }
 
+
+
+
 /* design for table area */
 .table-container{ 
     margin: auto;
@@ -573,6 +576,26 @@ display: none;
 }
 
 
+#hTable{
+    margin-top: 3rem;
+    overflow: auto;
+}
+#hTable table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid whitesmoke;
+    background-color: transparent
+  }
+  
+ #hTable table th, td {
+    text-align: left;
+    padding: 8px;
+    border: 3px solid whitesmoke;
+  }
+
+
+
+
 
 #tableBody{
     border-collapse: collapse;
@@ -584,9 +607,6 @@ display: none;
 }
  
 table tr, th, td{
- 
-    background-color: #636161fc;
-    border: 1px solid #030000;
     padding: 20px;
     width: -webkit-fill-available 
 }
@@ -681,20 +701,39 @@ background-color: rgba(213, 180, 175, 0.914)
     font-weight: bold;
 }
 .container2 {
+   
     height: 100vh;
     display: flex;
     flex-direction: column;
     width: 40vw;
-    align-content: center;
-    align-items: center;
 }
 .linechart{
+    margin-top: 1rem;
     width: 40vw;
+    display: flex;
+    flex-direction: column;
+}
+.linechart .pesos {
+    text-orientation: upright;
+    writing-mode: vertical-lr;
+    position: relative;
+    left: 2rem;
+    font-size: 1vw;
+    text-align: center;
+}
+.linechart .months{
+    text-align: center;
+    font-size: 1vw;
+}
+.chart-container{
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: row-reverse;
 }
 .container2 p{
     text-transform: uppercase;
-    text-align: center;
-    font-size: 30px;
+    font-size: 1.9vw;
+    font-weight: bold;
     float: left;
 }
 .container2 p, #myChart2{
