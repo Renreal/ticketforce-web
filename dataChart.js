@@ -1,4 +1,4 @@
-var xValues = ["ISSUED TICKET", "PAID TICKET"];
+var xValues = ["PERCENTAGE OF ISSUED TICKETS", "PERCENTAGE OF PAID TICKETS"];
 var yValues = [55, 45];
 var barColors = ["#d6d6c1", "#e7e778"];
 
@@ -13,12 +13,14 @@ new Chart("myChart", {
   },
   options: {
     title: {
-      display: true,
+      display: false,
       text: "Ticket Types"
     },
     legend: {
+      position: 'right',
       labels: {
-        fontColor: 'black' // Set the font color to black
+        fontColor: 'black',
+        fontSize: 14 
       }
     }
   }
@@ -84,8 +86,8 @@ const xVal = [1, 2, 3];
       const timeElement = document.querySelector('.time');
 
       // Update date and time content
-      dateElement.textContent = currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      timeElement.textContent =  currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      dateElement.textContent = 'Date: ' + currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      timeElement.textContent ='Time: ' +  currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     // Update every second (1000 milliseconds)
