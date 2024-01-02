@@ -98,7 +98,7 @@ uploadButton.addEventListener("click", () => {
                     document.getElementById("location").value = '';
                     uploadedImage.src = "personIcon.svg";
 
-                    alert("Data saved to Firestore.");
+                   
                     })
                   .catch((error) => {
                     console.error("Error saving data to Firestore: ", error);
