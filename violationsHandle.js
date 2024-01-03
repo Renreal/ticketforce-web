@@ -14,7 +14,8 @@
         
         /// Import Firestore functions from Firebase Firestore
         import { getFirestore, query, where, getDocs, collection, deleteDoc, doc} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-       
+        
+
 
         // Initialize Firebase auth and firestore
       const app = initializeApp(firebaseConfig);
@@ -29,11 +30,14 @@ const querySnapshot = await getDocs(recordCollection);
 
 // Access the table body to append rows
 const tableBody = document.getElementById("tbl_home").getElementsByTagName("tbody")[0];
+    let counter = 0;
 
 // Check if there is at least one document in the collection
 if (!querySnapshot.empty) {
     // Loop through each document in the collection
     querySnapshot.forEach(async (doc) => {
+        counter++;
+
         // Get the data from the current document
         const docData = doc.data();
         const enforcerUid = docData.uid;
@@ -75,4 +79,6 @@ if (!querySnapshot.empty) {
     console.error("No documents found in the 'Record' collection.");
 }
 
+document.getElementById("counter").textContent = counter.toString();
 
+export const countervalue = counter;
