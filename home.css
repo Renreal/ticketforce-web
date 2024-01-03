@@ -609,6 +609,7 @@ display: none;
     overflow: auto;
     width: -webkit-fill-available;
     margin: 0 1rem;
+    height: 50vh;
 }
 
 #reportTable table{
