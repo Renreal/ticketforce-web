@@ -1,75 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ticket force</title>
-  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="cHome.css">
+  <link rel="icon" href="logo.png"> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-</head>
-
 <body>
- <div id="main">
-    <div id="mySidebar" class="sidebar">
-        <span class="closebtn" onclick="closeNav()">×</span>
-        <img src="personIcon.svg">
-        <p id="userName"></p>
-        <p id="role">CASHIER</p>
+<div id="main">
+            <div id="mySidebar" class="sidebar">
+              <span class="closebtn" onclick="closeNav()">×</span>
+              <img src="personIcon.svg">
+              <p id="userName"></p>
+              <p id="role">CASHIER</p>
 
-        <a href="C_Home.html" class="home">HOME</a> 
-        <a href="drivers.html" >DRIVERS</a> 
-        <a href="transactions.html">TRANSACTION</a> 
-        <a href="#">REPORT</a>
-      </div>
-      <div class="nav-bar">
-        <button class="openbtn" onclick="openNav()">☰</button>
-        <img src="logo.png" class="logo"> 
-        
-        <div class="span">
-           <img src="icon.svg" class="icon">
-           <button id="logoutButton">Logout</button>
-        </div>
-    </div>
-
-
-    <div class="Cwrapper">
-    <div class="Ccontainer1">
-        <div class="c1-1">
-            <div class="violations">
-            <p class="date">Date:</p>
-            <p class="time">Time:</p>
-            <p class="numViolations">NO. OF VIOLATIONS</p>
-            <span>90 </span>
-           </div>
-           <canvas id="myChart" style="width:100%;max-width:600px;max-height:400px;"></canvas>
-        </div>
-        <div class="transactions-container">
-            <p>Transactions</p>
-            <div class="T-data">
-              <span class="T-data">John Doe has paid  P1000  </span>
+              <a href="C_Home.html" class="home">HOME</a> 
+              <a href="drivers.html" >DRIVERS</a> 
+              <a href="transactions.html">TRANSACTION</a> 
+              <a href="#">REPORT</a>
             </div>
-            
-        </div>
-    </div>
-    <div class="container2">
-        
-        <p>monthly revenue</p>
-        <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
-        
-        
-      </div>
+            <div class="nav-bar">
+              <button class="openbtn" onclick="openNav()">☰</button>
+              <img src="logo.png" class="logo"> 
+              
+              <div class="span">
+                <img src="icon.svg" class="icon">
+                <button id="logoutButton">Logout</button>
+              </div>
+          </div>
     
+              <div class="Cwrapper">
+                <div class="container1">
+                    <div class="c1-1">
+                        <div class="violations">
+                        <p class="date"></p>
+                          <p class="time"></p>
+                        <p class="numViolations">NO. OF TICKETS</p>
+                        <span id="counter"> </span>
+                       </div>
+                       <canvas id="myChart" style="width:100%;max-width:400px;max-height:400px;"></canvas>
+                    </div>
 
- </div>
-  </div>
+                    <div class="transactionContainer"> 
+                      <p>Transactions</p>
+                      <ul id="transactions">
+                       
+                        <li>john doe has paid 100</li>
+                      </ul>
+                    </div>
+                    
+                </div>
 
+                <div class="container2">
+                    <div class="linechart">
+                       <p>monthly revenue</p>
+                   <div class="chart-container">
+                    <canvas id="myChart2" style="width:100%;max-width:1000px"></canvas>
+                    <p class="pesos">PESOS</p>
+                   </div>
+                    <p class="months">MONTHS</p>
+                    </div>
+                   
+                    <!-- Table -->
+                  
+                    <div id="hTable">
+                      <table id="tbl_home">
+                          <thead>
+                              <tr>
+                                  <th class="tbl_td">ENFORCER</th>
+                                  <th class="tbl_td">DRIVER</th>
+                                  <th class="tbl_td">DATE OF ISSUANCE</th>
+                                  <th class="tbl_td">STATUS</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                                  <!-- Table rows will be dynamically added here -->
+                          </tbody>
+                      </table> 
+                      
+                      
+                  </div>       
+                  <div class="redi-btn">
+                      <a href="report.html">SHOW LOGS</a>
+                  </div>            
+                   
+                 
+                  </div>
+                
+            
+             </div>
+</div>
+            
+            
+             
+              <script src="sidebar.js"></script>
+              <script src="charts.js" type="module"></script>
+              
+            <script type="module" src="FirebaseConfig.js"></script>
+            <script type="module" src="router.js"></script>
+            <script type="module" src="violationsHandle.js"></script>
 
- 
-  <script src="sidebar.js"></script>
-  <script src="dataChart.js"></script>
-  
-<script type="module" src="FirebaseConfig.js"></script>
-<script type="module" src="router.js"></script>
 </body>
-</html>
-
+</html> 

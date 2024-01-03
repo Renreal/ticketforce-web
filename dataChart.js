@@ -94,7 +94,7 @@ console.log("Counter value from file1.js:", countervalue);
         const timeElement = document.querySelector('.time');
 
         // Update date and time content
-        dateElement.textContent = 'Date: ' + currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        dateElement.textContent = 'Date: ' + currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         timeElement.textContent ='Time: ' +  currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       }
 

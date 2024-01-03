@@ -23,7 +23,8 @@ const searchInput = document.getElementById("searchInput");
 
 // Function to search for enforcers by ID or firstname
 const searchEnforcers = async () => {
-    const searchTerm = searchInput.value.trim().toLowerCase();
+  const searchTerm = searchInput.value.trim();
+
 
     // Clear previous search results
     searchResults.innerHTML = '';
@@ -98,33 +99,100 @@ const enforcersCollection = collection(db, "Drivers");
 
 
 function displayResult(data) {
-    const resultElement = document.createElement("div");
-    resultElement.innerHTML = ` 
-        <img src="${data.profilePicture}" alt="Enforcer Image" width="100"><br>
-        <p>Name: ${data.fname} ${data.lname} </p>
-        <p>ID No.: ${data.license}</p>
-        <button class="view-button">VIEW</button>
-    `;
-    searchResults.appendChild(resultElement);
+  const resultElement = document.createElement("div");
+  resultElement.innerHTML = ` 
+      <img src="${data.profilePicture}" alt="Enforcer Image" width="100"><br>
+      <p class="fname">First Name: ${data.fname}</p>
+      <p class="lname">Last Name: ${data.lname}</p>
+      <p class="license">ID No.: ${data.license}</p>
+      <button class="view-button">VIEW</button>
+  `;
+  searchResults.appendChild(resultElement);
 }
+
 
 // Trigger the search function on the "input" event
 searchInput.addEventListener("input", searchEnforcers);
+const vioRecordsContainer = document.querySelector('.vioContainer');
 
 
-searchResults.addEventListener("click", (e) => {
+
+searchResults.addEventListener("click", async (e) => {
   if (e.target.classList.contains("view-button")) {
-      document.querySelector('.registerWrapper').style.display = 'none';
-      document.querySelector('.vioContainer').style.display = 'block';
-    
-       // Get the name from the clicked result
-       const name = `${data.fname} ${data.lname}`;
+      // Get the clicked result element
+      const resultElement = e.target.closest("div");
 
-       // Update the name in the vHeader
-       const vHeaderName = vioRecordsContainer.querySelector('.vHeader .name');
-       vHeaderName.textContent = name;
+      // Get the 'license' value associated with the clicked result
+      const license = resultElement.querySelector('.license').textContent.split(":")[1].trim();
+
+      try {
+          // Perform a new query to Firestore to get all documents with the matching 'license' value
+          const enforcersCollection = collection(db, "Record");
+          const q = query(enforcersCollection, where("license", "==", license));
+          const querySnapshot = await getDocs(q);
+
+          // Check if any matching documents are found
+          if (querySnapshot.size > 0) {
+              // Loop through each matching document and print the desired fields
+              querySnapshot.forEach((doc) => {
+                  const data = doc.data();
+                  // Print the names or any other desired fields
+                  console.log(`First Name: ${data.name}, Last Name: ${data.type}`);
+              });
+          } else {
+              console.log(`No documents found in the "Record" collection with license ${license}`);
+              // Handle the case where no documents are found with the specified 'license'
+          }
+      } catch (error) {
+          console.error("Error querying 'Record' collection:", error);
+      }
   }
 });
+
+// ... (existing code)
+
+
+
+
+
+
+
+
+
+
+
+
+/* searchResults.addEventListener("click", (e) => {
+  if (e.target.classList.contains("view-button")) {
+      // Get the clicked result element
+      const resultElement = e.target.closest("div");
+
+      // Get the data associated with the clicked result
+      const data = {
+          profilePicture: resultElement.querySelector('img').src,
+          fname: resultElement.querySelector('.fname').textContent.split(":")[1].trim(),
+          lname: resultElement.querySelector('.lname').textContent.split(":")[1].trim(),
+          license: resultElement.querySelector('.license').textContent.split(":")[1].trim()
+      };
+      
+      // Your existing code to update the vHeader
+      const name = `${data.fname} ${data.lname}`;
+      const vHeaderName = vioRecordsContainer.querySelector('.vHeader .name');
+      vHeaderName.textContent = name;
+
+      // Your existing code to show the vioContainer
+      document.querySelector('.registerWrapper').style.display = 'none';
+      document.querySelector('.vioContainer').style.display = 'block';
+  }
+}); */
+
+
+
+
+
+
+
+
 
 // Add an event listener to the "X" span inside the viocontainer
 document.querySelector('.VioRecords span').addEventListener("click", () => {
