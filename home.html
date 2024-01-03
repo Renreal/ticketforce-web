@@ -72,27 +72,23 @@
                   
                     <div id="hTable">
                       <table id="tbl_home">
-                        <tr>
-                          <th class="tbl_td">ENFORCER</th>
-                          <th class="tbl_td">DRIVER</th>
-                          <th class="tbl_td">DATE OF ISSUANCE</th>
-                          <th class="tbl_td">STATUS</th>
-                        </tr>
-                        <tr>
-                          <td class="tbl_td">Jill Say</td>
-                          <td class="tbl_td">Spencer</td>
-                          <td class="tbl_td">1/2/24</td>
-                          <td class="tbl_td">unpaid</td>
-                        </tr>
-                        <tr>
-                          <td class="tbl_td">Jhon Doe</td>
-                          <td class="tbl_td">Aileen</td>
-                          <td class="tbl_td">1/2/24</td>
-                          <td class="tbl_td">unpaid</td>
-                        </tr>
-                      </table>
-                    </div>
+                          <thead>
+                              <tr>
+                                  <th class="tbl_td">ENFORCER</th>
+                                  <th class="tbl_td">DRIVER</th>
+                                  <th class="tbl_td">DATE OF ISSUANCE</th>
+                                  <th class="tbl_td">STATUS</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                                  <!-- Table rows will be dynamically added here -->
+                          </tbody>
+                      </table> 
+                      
+                      <a href="report.html">SHOW LOGS</a>
+                  </div>                  
 
+                 
                   </div>
                 
             
@@ -106,6 +102,7 @@
               
             <script type="module" src="FirebaseConfig.js"></script>
             <script type="module" src="router.js"></script>
+            <script type="module" src="violationsHandle.js"></script>
 
 </body>
 </html> 

@@ -583,8 +583,12 @@ display: none;
 
 
 #hTable{
+    display: flex;
     margin-top: 3rem;
     overflow: auto;
+    height: 25vh;
+    flex-direction: column;
+    align-items: flex-end;
 }
 #hTable table {
     border-collapse: collapse;
@@ -593,11 +597,7 @@ display: none;
     background-color: transparent
   }
   
-  #tbl_home tr, th, td {
-    text-align: left;
-    padding: 8px;
-    border: 3px solid whitesmoke;
-  }
+ 
 
   #tbl_home .tbl_td{
     border: 3px solid whitesmoke;
@@ -621,11 +621,20 @@ display: none;
     border: 1px solid black;
 }
 
- 
-#reportTable  tr, th, td{
+#reportTable tr,
+#reportTable th,
+#reportTable td {
     text-align: left;
     padding: 1rem;
-    border: 1px solid black;   
+    border: 1px solid black;
+}
+
+#tbl_home tr,
+#tbl_home th,
+#tbl_home td {
+    text-align: center;
+    padding: 8px;
+    border: 3px solid whitesmoke;
 }
 
 .printbtn{  
@@ -718,11 +727,27 @@ background-color: rgba(213, 180, 175, 0.914)
     font-weight: bold;
 }
 .container2 {
-   
     height: 100vh;
     display: flex;
     flex-direction: column;
     width: 40vw;
+    justify-content: center;
+}
+.container2 a{
+    position: relative;
+    background-color: #e7e778;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 0.5em 1rem 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    position: absolute;
+    bottom: 1rem;
+}
+.container2 a:hover{
+    background-color: #f6f68d;
 }
 .linechart{
     margin-top: 1rem;
