@@ -117,11 +117,16 @@ const vioRecordsContainer = document.querySelector('.vioContainer');
 
 
 
+
+
+
+// ...
+
 searchResults.addEventListener("click", async (e) => {
   if (e.target.classList.contains("view-button")) {
       // Get the clicked result element
       const resultElement = e.target.closest("div");
-
+      showModal();
       // Get the 'license' value associated with the clicked result
       const license = resultElement.querySelector('.license').textContent.split(":")[1].trim();
 
@@ -131,13 +136,56 @@ searchResults.addEventListener("click", async (e) => {
           const q = query(enforcersCollection, where("license", "==", license));
           const querySnapshot = await getDocs(q);
 
+          // Clear the list outside the loop
+          const recordsList = document.querySelector('.records');
+          recordsList.innerHTML = '';
+          const amountList = document.querySelector('.amountsList');
+          amountList.innerHTML = '';
+
           // Check if any matching documents are found
           if (querySnapshot.size > 0) {
+            let totalAmount = 0;
               // Loop through each matching document and print the desired fields
               querySnapshot.forEach((doc) => {
                   const data = doc.data();
-                  // Print the names or any other desired fields
-                  console.log(`First Name: ${data.name}, Last Name: ${data.type}`);
+
+                  // Extract the violations array from the data
+                  const violationsArray = data.violations;
+
+                  // Log the name and other desired fields
+                  console.log(`Name: ${data.name}`);
+                  console.log(`Ticket No.: ${data.id}`);
+                  console.log("Violations:");
+
+                  // Update the vHeader with the document name
+                  const Dname = `${data.name}`;
+                  const vHeaderName = vioRecordsContainer.querySelector('.vHeader .name');
+                  vHeaderName.textContent = Dname;
+
+                  // Update the ticket number in the vHeader
+                  const tckNo = `${data.id}`;
+                  const tckElement = vioRecordsContainer.querySelector('.vHeader2 .tckt');
+                  tckElement.textContent = 'Ticket No. ' + tckNo;
+
+                 
+                  // Loop through each violation in the array and log its information
+                  violationsArray.forEach((violation) => {
+                      console.log(`- ${violation["Name of Violation"]}`);
+
+                      // Create an li element for each violation and append it to the list
+                      const li = document.createElement('li');
+                      li.textContent = `${violation["Name of Violation"]}`;
+                      recordsList.appendChild(li);
+
+                      const li2 = document.createElement('li');
+                      li2.textContent = ` ₱ ${violation.Amount}`;
+                      amountList.appendChild(li2);
+
+                      totalAmount += violation.Amount;
+                  });
+
+                  const totalAmountElement = document.getElementById('total');
+                  totalAmountElement.textContent = `Total Amount = ₱ ${totalAmount}`;
               });
           } else {
               console.log(`No documents found in the "Record" collection with license ${license}`);
@@ -149,7 +197,6 @@ searchResults.addEventListener("click", async (e) => {
   }
 });
 
-// ... (existing code)
 
 
 
@@ -162,30 +209,13 @@ searchResults.addEventListener("click", async (e) => {
 
 
 
-/* searchResults.addEventListener("click", (e) => {
-  if (e.target.classList.contains("view-button")) {
-      // Get the clicked result element
-      const resultElement = e.target.closest("div");
 
-      // Get the data associated with the clicked result
-      const data = {
-          profilePicture: resultElement.querySelector('img').src,
-          fname: resultElement.querySelector('.fname').textContent.split(":")[1].trim(),
-          lname: resultElement.querySelector('.lname').textContent.split(":")[1].trim(),
-          license: resultElement.querySelector('.license').textContent.split(":")[1].trim()
-      };
-      
-      // Your existing code to update the vHeader
-      const name = `${data.fname} ${data.lname}`;
-      const vHeaderName = vioRecordsContainer.querySelector('.vHeader .name');
-      vHeaderName.textContent = name;
 
-      // Your existing code to show the vioContainer
-      document.querySelector('.registerWrapper').style.display = 'none';
+
+function showModal(){
+  document.querySelector('.registerWrapper').style.display = 'none';
       document.querySelector('.vioContainer').style.display = 'block';
-  }
-}); */
-
+}
 
 
 

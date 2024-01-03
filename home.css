@@ -846,13 +846,20 @@ p.title{
     padding: 1rem;
     border-radius: 2rem;
 }
-.VioRecords ul{
+.VioRecords .records{
+    list-style:decimal;
+}
+.VioRecords .amountsList{
     list-style: none;
 }
 .vHeader{
     display: flex;
     justify-content: space-between;
     margin: 1rem;
+    font-size: 2rem;
+}
+.vHeader .name{
+    text-transform: uppercase;
 }
 .vHeader span{
     font-weight: bold;
@@ -869,8 +876,29 @@ p.title{
      display: flex;
     align-items: center
 }
+.title{
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+.title p{
+    text-transform: uppercase;
+}
+ .title .amntTitle{
+    margin-left: 21rem;
+}
 
-
+#total {
+    float: right;
+    margin: 1rem 7rem 1rem 1rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+}
+.viodata{
+    display: flex;
+    justify-content: space-around;
+}
 /* violations tabs */
 .vioWrapper{
     background: rgba(255, 255, 255, 0.4);
