@@ -161,12 +161,19 @@ searchResults.addEventListener("click", async (e) => {
                   const Dname = `${data.name}`;
                   const vHeaderName = vioRecordsContainer.querySelector('.vHeader .name');
                   vHeaderName.textContent = Dname;
+                  
+                  
 
                   // Update the ticket number in the vHeader
                   const tckNo = `${data.id}`;
                   const tckElement = vioRecordsContainer.querySelector('.vHeader2 .tckt');
                   tckElement.textContent = 'Ticket No. ' + tckNo;
+                  
+                  const tcktNum = document.getElementById('ticketNum');
+                  tcktNum.textContent = 'Ticket No. ' + tckNo;
 
+                  const tcktName = document.getElementById('name');
+                  tcktName.textContent = Dname  + ' = ';
                  
                   // Loop through each violation in the array and log its information
                   violationsArray.forEach((violation) => {
@@ -186,6 +193,9 @@ searchResults.addEventListener("click", async (e) => {
 
                   const totalAmountElement = document.getElementById('total');
                   totalAmountElement.textContent = `Total Amount = ₱ ${totalAmount}`;
+                  
+                  const tcktAmount = document.getElementById('amount');
+                  tcktAmount.textContent = '₱' + totalAmount;
               });
           } else {
               console.log(`No documents found in the "Record" collection with license ${license}`);
@@ -200,22 +210,32 @@ searchResults.addEventListener("click", async (e) => {
 
 
 
+// Assuming you have a button with the id "back"
+const backButton = document.getElementById('back');
+const proceedBtn = document.getElementById('proceed');
+proceedBtn.addEventListener('click', proceedModal);
+// Add an event listener to the back button
+backButton.addEventListener('click', hideModal);
 
 
 
 
 
-
-
-
-
-
-
+function proceedModal(){
+  document.querySelector('.registerWrapper').style.display = 'none';
+  document.querySelector('.paymentContainer').style.display = 'flex';
+      document.querySelector('.vioContainer').style.display = 'none';
+}
 
 function showModal(){
   document.querySelector('.registerWrapper').style.display = 'none';
       document.querySelector('.vioContainer').style.display = 'block';
 }
+function hideModal(){
+  document.querySelector('.registerWrapper').style.display = 'flex';
+      document.querySelector('.vioContainer').style.display = 'none';
+}
+
 
 
 

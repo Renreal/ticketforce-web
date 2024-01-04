@@ -898,7 +898,34 @@ p.title{
 .viodata{
     display: flex;
     justify-content: space-around;
+    font-size: 1.2rem;
 }
+.btn{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+ #proceed:hover, #back:hover{
+   text-decoration: underline;
+}
+ #proceed{
+    padding: 0.5rem 1rem 0.5rem 1rem; 
+    border-color: transparent;
+    background-color: #f6f68d;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+ #back{
+    margin-right: 2rem;
+    padding: 0.5rem 2rem 0.5rem 2rem; 
+    border-color: transparent;
+    background-color: #f6f68d;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
 /* violations tabs */
 .vioWrapper{
     background: rgba(255, 255, 255, 0.4);
@@ -927,6 +954,37 @@ p.title{
     padding: 0.5rem;
     margin-bottom: 1.5rem;
     background-color: rgba(255, 255, 255, 0.4);
+}
+
+
+.paymentContainer{
+    display: none;
+}
+.paymentProcess{
+    background-color: white;
+    display: flex;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    margin: 5rem auto;
+    width: max-content;
+}
+#ticketNum{
+    margin-left: 20rem;
+}
+.summary{
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+ #name{
+text-transform: uppercase;
+font-size: 2rem;
+}
+#amount{
+    font-size: 1.5rem;
+    margin-left: 1rem;
 }
 
 #btnSave{
