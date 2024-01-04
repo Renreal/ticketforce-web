@@ -3,6 +3,8 @@ import { countervalue, paidStatus } from "./violationsHandle.js";
 // Now you can use the counter variable in this file
 console.log("Counter value from file1.js:", countervalue);
 console.log("Counter :", paidStatus);
+export let test = paidStatus;
+
   
   
  

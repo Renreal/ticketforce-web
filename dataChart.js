@@ -1,8 +1,8 @@
-import { countervalue, paidStatus } from "./violationsHandle.js";
-
+import { countervalue, paidStatus } from "./home.js";
 // Now you can use the counter variable in this file
 console.log("Counter value from file1.js:", countervalue);
 console.log("Counter :", paidStatus);
+
   
  
   var xValues = ["PERCENTAGE OF ISSUED TICKETS", "PERCENTAGE OF PAID TICKETS"];
