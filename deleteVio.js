@@ -1,6 +1,6 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+
 
 /* const firebaseConfig = {
   apiKey: "AIzaSyAgbOwN82nOnMm2TQtlAIEkObBbtaH9okw",
@@ -69,6 +69,8 @@ async function displayViolations(searchTerm = "") {
 
         const searchIconElement = document.createElement("i");
         searchIconElement.className = "fa fa-trash";
+        searchIconElement.addEventListener("click", () => deleteViolation(doc.id)); // Add this line
+        
 
         // Append elements to the container
         subconElement.appendChild(priceElement);
@@ -86,6 +88,19 @@ async function displayViolations(searchTerm = "") {
 
   // Call the function to display Violations data initially
   displayViolations();
+
+
+
+  async function deleteViolation(violationId) {
+    try {
+      const violationRef = doc(db, "Violations", violationId);
+      await deleteDoc(violationRef);
+      displayViolations(); // Refresh the displayed data after 
+      alert("Violation deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting Violation:", error);
+    }
+  }
 
   // Add event listener for search input changes
   const searchInput = document.getElementById("vSearch");
