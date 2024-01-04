@@ -56,6 +56,8 @@ if (!querySnapshot.empty) {
             const enforcerName = `${matchingEnforcer.firstname} ${matchingEnforcer.lastname}`;
             
             const driverName = docData.name;
+            const driverStatus = docData.status;
+        
             const timestamp = docData.dateTime.toMillis(); // Convert timestamp to milliseconds
             const formattedDate = new Date(timestamp).toLocaleDateString();
 
@@ -78,8 +80,8 @@ if (!querySnapshot.empty) {
                 violationCell.textContent = violation["Name of Violation"];
                 violationFeeCell.textContent = violation["Amount"];
                 paymentDateCell.textContent = formattedDate;
-                collectedFeeCell.textContent = "null"; // Replace with actual data
-                remarksCell.textContent = "null"; // Replace with actual data
+                collectedFeeCell.textContent = violation["Amount"]; // Replace with actual data
+                remarksCell.textContent = driverStatus; // Replace with actual data
             });
 
         } else {
@@ -126,6 +128,7 @@ async function fetchDataAndDisplay(startDate, endDate) {
             const matchingEnforcer = enforcerQuerySnapshot.docs[0].data();
             const enforcerName = `${matchingEnforcer.firstname} ${matchingEnforcer.lastname}`;
             const driverName = docData.name;
+            const driverStatus = docData.status;
             const timestamp = docData.dateTime.toMillis(); // Convert timestamp to milliseconds
             const formattedDate = new Date(timestamp).toLocaleDateString();
 
@@ -149,7 +152,7 @@ async function fetchDataAndDisplay(startDate, endDate) {
                 violationFeeCell.textContent = violation["Amount"];
                 paymentDateCell.textContent = formattedDate;
                 collectedFeeCell.textContent = "null"; // Replace with actual data
-                remarksCell.textContent = "null"; // Replace with actual data
+                remarksCell.textContent = "ajajh"; // Replace with actual data
             });
         } else {
             console.error("No matching enforcer found for uid:", enforcerUid);
