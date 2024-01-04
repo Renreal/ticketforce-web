@@ -1,38 +1,30 @@
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, query, where, getDocs, collection, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAuH9VHIHMBwrTOaUg2MZau4qsCpbVFSn4",
-            authDomain: "ticketforce-5ac87.firebaseapp.com",
-            projectId: "ticketforce-5ac87",
-            storageBucket: "ticketforce-5ac87.appspot.com",
-            messagingSenderId: "185677887310",
-            appId: "1:185677887310:android:5c2d30b29f40ee6063901f"
-        };
-        // Initialize Firebase
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyAuH9VHIHMBwrTOaUg2MZau4qsCpbVFSn4",
+    authDomain: "ticketforce-5ac87.firebaseapp.com",
+    projectId: "ticketforce-5ac87",
+    storageBucket: "ticketforce-5ac87.appspot.com",
+    messagingSenderId: "185677887310",
+    appId: "1:185677887310:android:5c2d30b29f40ee6063901f"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        
-        /// Import Firestore functions from Firebase Firestore
-        import { getFirestore, query, where, getDocs, collection, deleteDoc, doc} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-       
-
-        // Initialize Firebase auth and firestore
-      const app = initializeApp(firebaseConfig);
-     const db = getFirestore(app);
-        
-  
-  
-  
-  
-     // Reference to the "Record" collection
+// Reference to the "Record" collection
 const recordCollection = collection(db, "Record");
 
 // Retrieve all documents from the "Record" collection
 const querySnapshot = await getDocs(recordCollection);
 
-
 // Access the table body of the second table to append rows
 const tableBody2 = document.getElementById("tableBody").getElementsByTagName("tbody")[0];
+
+// Initialize total collected fee
+let totalCollectedFee = 0;
 
 // Check if there is at least one document in the collection
 if (!querySnapshot.empty) {
@@ -40,7 +32,7 @@ if (!querySnapshot.empty) {
     querySnapshot.forEach(async (doc) => {
         // Get the data from the current document
         const docData = doc.data();
-        
+
         const enforcerUid = docData.uid;
 
         // Reference to the "enforcers" collection
@@ -54,14 +46,17 @@ if (!querySnapshot.empty) {
         if (!enforcerQuerySnapshot.empty) {
             const matchingEnforcer = enforcerQuerySnapshot.docs[0].data();
             const enforcerName = `${matchingEnforcer.firstname} ${matchingEnforcer.lastname}`;
-            
+
             const driverName = docData.name;
             const driverStatus = docData.status;
-        
+
             const timestamp = docData.dateTime.toMillis(); // Convert timestamp to milliseconds
             const formattedDate = new Date(timestamp).toLocaleDateString();
 
             const violationsArray = docData.violations || [];
+
+            // Initialize total violation amount for each document
+            let totalViolationAmount = 0;
 
             // Create a new table row and cells for the second table for each violation
             violationsArray.forEach((violation) => {
@@ -80,17 +75,27 @@ if (!querySnapshot.empty) {
                 violationCell.textContent = violation["Name of Violation"];
                 violationFeeCell.textContent = violation["Amount"];
                 paymentDateCell.textContent = formattedDate;
-                collectedFeeCell.textContent = violation["Amount"]; // Replace with actual data
+
+                const collectedFee = parseFloat(violation["Amount"]); // Convert to a number
+                collectedFeeCell.textContent = collectedFee.toFixed(2); // Replace with actual data
+                totalCollectedFee += collectedFee; // Update total collected fee
+
                 remarksCell.textContent = driverStatus; // Replace with actual data
             });
 
+            // Display the total violation amount for each document
+            console.log(`Total Violation Amount for ${driverName}: $${totalViolationAmount.toFixed(2)}`);
         } else {
             console.error("No matching enforcer found for uid:", enforcerUid);
         }
     });
+
+    // Display the total collected fee
+    document.getElementById("total").textContent = `TOTAL: $${totalCollectedFee.toFixed(2)}`;
 } else {
     console.error("No documents found in the 'Record' collection.");
 }
+
 
 
 

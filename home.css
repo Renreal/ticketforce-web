@@ -807,7 +807,7 @@ background-color: rgba(213, 180, 175, 0.914)
     border-radius: 1rem;
     flex-direction: column;
     overflow: auto;
-    height: 58vh;
+    height: 95vh;
 }
 .Tdata{
     display: flex;
