@@ -80,6 +80,55 @@ if (!querySnapshot.empty) {
     console.error("No documents found in the 'Record' collection.");
 }
 
+
+
+
+async function countPaidStatusDocumentsAndDisplay() {
+    try {
+      // Reference to the "Record" collection
+      const recordCollection = collection(db, "Record");
+  
+      // Query to find documents where the status is 'paid'
+      const paidStatusQuery = query(recordCollection, where("status", "==", "paid"));
+  
+      // Retrieve documents that match the query
+      const paidStatusSnapshot = await getDocs(paidStatusQuery);
+  
+      // Access the transaction container to append transaction items
+      const transactionContainer = document.querySelector(".transactionContainer ul");
+  
+      // Loop through each document with 'paid' status
+      paidStatusSnapshot.forEach((doc) => {
+        // Get the data from the current document
+        const docData = doc.data();
+        const driverName = docData.name;
+  
+        // Display the name and payment amount in the HTML
+        const transactionItem = document.createElement("li");
+        transactionItem.textContent = `${driverName} has paid ${docData.paymentAmount}`;
+        transactionContainer.appendChild(transactionItem);
+      });
+  
+      // Return the count of documents with 'paid' status
+      return paidStatusSnapshot.size;
+    } catch (error) {
+      console.error("Error counting 'paid' status documents:", error);
+      return 0; // Return 0 in case of an error
+    }
+  }
+  
+  // Call the countPaidStatusDocumentsAndDisplay function to get the count and display names/payment amounts
+  const paidStatusCount = await countPaidStatusDocumentsAndDisplay();
+  
+  // Display the count or use it as needed
+  console.log("Number of documents with 'paid' status:", paidStatusCount);
+  
+  export const paidStatus = paidStatusCount;
+  
+
+
+
+
 document.getElementById("counter").textContent = counter.toString();
 
 export const countervalue = counter;

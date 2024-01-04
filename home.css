@@ -802,12 +802,12 @@ background-color: rgba(213, 180, 175, 0.914)
     margin: 2rem 15rem 0.5rem 15rem;
     display: flex;
     width: -webkit-fill-available;
-    background-color:#e7e778;
+    background-color: #e7e778;
     padding: 2rem;
     border-radius: 1rem;
     flex-direction: column;
-    height: 50vh;
-   
+    overflow: auto;
+    height: 58vh;
 }
 .Tdata{
     display: flex;

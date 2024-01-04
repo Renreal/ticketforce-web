@@ -1,11 +1,13 @@
-import { countervalue } from "./violationsHandle.js";
+import { countervalue, paidStatus } from "./violationsHandle.js";
 
 // Now you can use the counter variable in this file
 console.log("Counter value from file1.js:", countervalue);
+console.log("Counter :", paidStatus);
+  
   
  
   var xValues = ["PERCENTAGE OF ISSUED TICKETS", "PERCENTAGE OF PAID TICKETS"];
-  var yValues = [countervalue, 20];
+  var yValues = [countervalue, paidStatus];
   var barColors = ["#d6d6c1", "#e7e778"];
 
   new Chart("myChart", {
