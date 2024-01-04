@@ -56,6 +56,7 @@ if (!querySnapshot.empty) {
 
 
             const driverName = docData.name;
+            const driverStatus = docData.status;
             const timestamp = docData.dateTime.toMillis(); // Convert timestamp to milliseconds
             const formattedDate = new Date(timestamp).toLocaleDateString();
 
@@ -70,7 +71,7 @@ if (!querySnapshot.empty) {
             enforcerCell.textContent = enforcerName; // Replace with actual data
             driverCell.textContent = driverName;
             dateCell.textContent = formattedDate; // Replace with actual data
-            statusCell.textContent = "unpaid"; // Replace with actual data
+            statusCell.textContent = driverStatus; // Replace with actual data
         } else {
             console.error("No matching enforcer found for uid:", enforcerUid);
         }
