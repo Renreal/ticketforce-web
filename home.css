@@ -954,6 +954,7 @@ p.title{
     padding: 0.5rem;
     margin-bottom: 1.5rem;
     background-color: rgba(255, 255, 255, 0.4);
+    
 }
 
 .inputFields{
@@ -1025,10 +1026,27 @@ font-size: 2rem;
     flex-direction: column;
     align-items: center;
 }
+#hideContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+}
 .eSearch{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+#editVioPage{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+#editVioPage span{
+    font-size: 3rem;
+    font-weight: bold;
 }
 .eSearch span{
     font-size: 3rem;
@@ -1066,8 +1084,9 @@ font-size: 2rem;
     justify-content: space-around;
     align-items: center;
 }
+
 .subcon i{
-    color: red;
+    color: black;
 }
 .subcon i:hover{
     background-color: white;
@@ -1075,6 +1094,7 @@ font-size: 2rem;
     border-radius: 3rem;
 }
 #resContainer{
+    display: block;
     margin-top: 1rem;
     height: 50vh;
     padding: 0.5rem;

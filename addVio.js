@@ -28,7 +28,7 @@ document.getElementById("btnSave").addEventListener("click", async function (e) 
     e.preventDefault();
 
     var violationInput = document.getElementById("vioName");
-    var amountInput = document.getElementById("amount");
+    var amountInput = document.getElementById("amountInput");
 
     var violation = violationInput.value.trim().toLowerCase();
     var amountV = amountInput.value.trim().toLowerCase();
@@ -56,5 +56,10 @@ document.getElementById("btnSave").addEventListener("click", async function (e) 
     }
 });
 
+
+document.getElementById('btnCancel').addEventListener('click', function() {
+    // Redirect to the home page
+    window.location.href = '/home.html'; // Change '/home' to the actual URL of your home page
+  });
 
 
