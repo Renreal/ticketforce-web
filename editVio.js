@@ -129,15 +129,7 @@ saveBtn.addEventListener("click", async function () {
   }
 });
 
-// ...
 
-// ...
-
-
-    // ...
-
-
-    // Call the function to display Violations data initially
     displayViolations();
 
     // Add event listener for search input changes
