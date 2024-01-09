@@ -47,7 +47,10 @@ const searchEnforcers = async () => {
     queryPromises.push(getDocs(q));
   } else {
     // If the search term is not an integer, query by name
-    const q1 = query(enforcersCollection, where("name", ">=", searchTerm), where("name", "<=", searchTerm + "\uf8ff"));
+    const q1 = query(enforcersCollection, 
+      where("name", ">=", searchTerm), 
+      where("name", "<=", searchTerm + "\uf8ff"),
+    );
     queryPromises.push(getDocs(q1));
   }
 
@@ -57,11 +60,15 @@ const searchEnforcers = async () => {
     querySnapshots.forEach((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        displayResult(data);
+
+        // Check if the document has a 'ticketNumber' field before displaying
+        if ('ticketNumber' in data) {
+          displayResult(data);
+        }
       });
     });
 
-    if (querySnapshots.length === 0 || querySnapshots[0].size === 0) {
+    if (querySnapshots.length === 0 || querySnapshots.every(snapshot => snapshot.size === 0)) {
       // Display a message if no results are found
       searchResults.innerHTML = "No matching enforcers found.";
     }
@@ -69,6 +76,7 @@ const searchEnforcers = async () => {
     console.error("Error searching enforcers:", error);
   }
 };
+
 
 function displayResult(data) {
   const resultElement = document.createElement("div");
@@ -154,39 +162,110 @@ function displayResult(data) {
         }
 
         // btnOk logic
-        document.getElementById('btnOk').addEventListener('click', async () => {
-          // Get the payment amount from the input field
-          const paymentAmount = document.getElementById('paymentAmount').value;
+document.getElementById('btnOk').addEventListener('click', async () => {
+  // Get the payment amount from the input field
+  const paymentAmount = document.getElementById('paymentAmount').value;
 
-          // Check if the payment amount is valid (you might want to add additional validation)
-          if (!paymentAmount || isNaN(parseFloat(paymentAmount))) {
-            alert('Please enter a valid payment amount.');
-            return;
-          }
+  // Check if the payment amount is valid (you might want to add additional validation)
+  if (!paymentAmount || isNaN(parseFloat(paymentAmount))) {
+      alert('Please enter a valid payment amount.');
+      return;
+  }
 
-          // Get the total amount displayed on the UI
-          const totalAmountElement = document.getElementById('total');
-          const totalAmount = parseFloat(totalAmountElement.textContent.split('₱')[1]);
+  // Get the total amount displayed on the UI
+  const totalAmountElement = document.getElementById('total');
+  const totalAmount = parseFloat(totalAmountElement.textContent.split('₱')[1]);
 
-          // Compare totalAmount with the paymentAmount
-          if (totalAmount !== parseFloat(paymentAmount)) {
-            alert('Payment amount does not match the total amount. Please enter the correct payment amount.');
-            return;
-          }
+  // Compare totalAmount with the paymentAmount
+  if (totalAmount !== parseFloat(paymentAmount)) {
+      alert('Payment amount does not match the total amount. Please enter the correct payment amount.');
+      return;
+  }
 
-          try {
-            // Update the document with the new status and payment amount
-            await updateDoc(querySnapshot.docs[0].ref, {
-              status: "paid",
-              paymentAmount: parseFloat(paymentAmount),
-            });
+  try {
+      // Update the document with the new status and payment amount
+      await updateDoc(querySnapshot.docs[0].ref, {
+          status: "paid",
+          paymentAmount: parseFloat(paymentAmount),
+      });
 
-            alert('Payment successfully processed.');
-            // Assuming you want to do something else after payment, you can trigger it here
-          } catch (error) {
-            console.error("Error updating 'Record' document:", error);
-          }
-        });
+      alert('Payment successfully processed.');
+
+      // Listen for real-time updates to the document
+      const unsubscribe = onSnapshot(querySnapshot.docs[0].ref, (updatedDoc) => {
+          // Refresh the displayed data based on the updated document
+          refreshDisplayedData(updatedDoc);
+          // Unsubscribe from further updates
+          unsubscribe();
+      });
+  } catch (error) {
+      console.error("Error updating 'Record' document:", error);
+  }
+});
+
+// Function to refresh the displayed data based on the updated document
+function refreshDisplayedData(updatedDoc) {
+  const recordsList = document.querySelector('.records');
+  recordsList.innerHTML = '';
+  const amountList = document.querySelector('.amountsList');
+  amountList.innerHTML = '';
+
+  const data = updatedDoc.data();
+  const violationsArray = data.violations;
+
+  // Log the name and other desired fields
+  console.log(`Name: ${data.name}`);
+  console.log(`Ticket No.: ${data.ticketNumber}`);
+  console.log(`Status: ${data.status}`); // Log the status field
+
+  // Update the vHeader with the document name
+  const Dname = `${data.name}`;
+  const vHeaderName = vioRecordsContainer.querySelector('.vHeader .name');
+  vHeaderName.textContent = Dname;
+
+  // Update the ticket number in the vHeader
+  const tckNo = `${data.ticketNumber}`;
+  const tckElement = vioRecordsContainer.querySelector('.vHeader2 .tckt');
+  tckElement.textContent = 'Ticket No. ' + tckNo;
+
+  const tcktNum = document.getElementById('ticketNum');
+  tcktNum.textContent = 'Ticket No. ' + tckNo;
+
+  const tcktName = document.getElementById('name');
+  tcktName.textContent = Dname + ' = ';
+
+  let totalAmount = 0;
+
+  // Loop through each violation in the array and log its information
+  for (const violation of violationsArray) {
+      console.log(`- ${violation["Name of Violation"]}`);
+
+      // Create an li element for each violation and append it to the list
+      const li = document.createElement('li');
+      li.textContent = `${violation["Name of Violation"]}`;
+      recordsList.appendChild(li);
+
+      const li2 = document.createElement('li');
+      li2.textContent = ` ₱ ${violation.Amount}`;
+      amountList.appendChild(li2);
+
+      totalAmount += violation.Amount;
+  }
+
+  const totalAmountElement = document.getElementById('total');
+  const tcktAmount = document.getElementById('amount') || document.querySelector('#amount');
+
+  const allPaid = data.allPaid;
+
+  if (allPaid || data.status === "paid") {
+      totalAmountElement.textContent = 'Total Amount = Paid';
+      tcktAmount.textContent = 'Paid';
+  } else {
+      totalAmountElement.textContent = `Total Amount = ₱ ${totalAmount}`;
+      tcktAmount.textContent = '₱' + totalAmount;
+  }
+}
+
 
       } else {
         console.log(`No document found in the "Record" collection with ticket number ${data.ticketNumber}`);
@@ -240,7 +319,7 @@ const vioRecordsContainer = document.querySelector('.vioContainer');
 
   proceedBtn.addEventListener('click', proceedModal);
   backButton.addEventListener('click', hideModal);
-  backButton2.addEventListener('click', hideModal);
+  backButton2.addEventListener('click', showModal);
 
 
 
