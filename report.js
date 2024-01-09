@@ -26,6 +26,7 @@
     // Loop through the documents and perform the desired operations
     for (const doc of querySnapshot.docs) {
         const formattedDate = doc.data().dateTime.toDate().toLocaleDateString();
+        
         const uid = doc.data().uid;
 
         // Check if there's a matching document in the "enforcers" collection
@@ -45,6 +46,7 @@
                 // Increment the total paymentAmount
                 totalPaymentAmount += parseFloat(doc.data().paymentAmount);
             }
+            const paidDate = doc.data().dateOfPayment ? new Date(doc.data().dateOfPayment.toMillis()).toLocaleDateString() : '';
 
             // Create a new row for each combination of 'Amount' and 'Name of Violation'
             const newRow = document.createElement('tr');
@@ -53,7 +55,7 @@
                 <td>${enforcerName}</td>
                 <td>${violation['Name of Violation']}</td>
                 <td>${violation.Amount}</td>
-                <td>${doc.data().dateOfPayment}</td>
+                <td>${paidDate}</td>
                 <td>${doc.data().paymentAmount}</td>
                 <td>${doc.data().status}</td>
             `;
@@ -116,6 +118,8 @@
     
                 // Handle the violations array
                 doc.data().violations.forEach((violation) => {
+                    const paidDate = doc.data().dateOfPayment ? new Date(doc.data().dateOfPayment.toMillis()).toLocaleDateString() : '';
+
                     // Create a new row for each combination of 'Amount' and 'Name of Violation'
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
@@ -123,9 +127,9 @@
                         <td>${enforcerName}</td>
                         <td>${violation['Name of Violation']}</td>
                         <td>${violation.Amount}</td>
-                        <td>${doc.data().dateOfPayment || ''}</td>
-                        <td>${doc.data().paymentAmount || ''}</td>
-                        <td>${doc.data().status || ''}</td>
+                        <td>${paidDate}</td>
+                        <td>${doc.data().paymentAmount}</td>
+                        <td>${doc.data().status}</td>
                     `;
     
                     // Push the row to the array
@@ -153,12 +157,6 @@
             console.error("Error fetching and displaying data:", error);
         }
     }
-
-
-
-
-
-
 
 
 

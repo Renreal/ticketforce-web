@@ -184,9 +184,12 @@ document.getElementById('btnOk').addEventListener('click', async () => {
 
   try {
       // Update the document with the new status and payment amount
+      const currentDateTime = new Date();
+      // Update the document with the current date as aV timestamp
       await updateDoc(querySnapshot.docs[0].ref, {
           status: "paid",
           paymentAmount: parseFloat(paymentAmount),
+          dateOfPayment: currentDateTime,
       });
 
       alert('Payment successfully processed.');

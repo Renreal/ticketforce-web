@@ -71,7 +71,8 @@ if (!querySnapshot.empty) {
             enforcerCell.textContent = enforcerName; // Replace with actual data
             driverCell.textContent = driverName;
             dateCell.textContent = formattedDate; // Replace with actual data
-            // Replace with actual data
+            statusCell.textContent = driverStatus; // Replace with actual data
+            
         } else {
             console.error("No matching enforcer found for uid:", enforcerUid);
         }
