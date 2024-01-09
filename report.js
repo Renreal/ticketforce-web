@@ -141,7 +141,7 @@ async function fetchDataAndDisplay(startDate, endDate) {
 
             // Create a new table row and cells for the second table for each violation
             violationsArray.forEach((violation) => {
-                const newRow2 = tableBody.insertRow(-1);
+                const newRow2 = tableBody2.insertRow(-1);
                 const dateCell2 = newRow2.insertCell(0);
                 const enforcerCell2 = newRow2.insertCell(1);
                 const violationCell = newRow2.insertCell(2);
@@ -156,8 +156,12 @@ async function fetchDataAndDisplay(startDate, endDate) {
                 violationCell.textContent = violation["Name of Violation"];
                 violationFeeCell.textContent = violation["Amount"];
                 paymentDateCell.textContent = formattedDate;
-                collectedFeeCell.textContent = "null"; // Replace with actual data
-                remarksCell.textContent = "ajajh"; // Replace with actual data
+
+                const collectedFee = parseFloat(violation["Amount"]); // Convert to a number
+                collectedFeeCell.textContent = collectedFee.toFixed(2); // Replace with actual data
+                totalCollectedFee += collectedFee; // Update total collected fee
+
+                remarksCell.textContent = driverStatus; // Replace with actual data
             });
         } else {
             console.error("No matching enforcer found for uid:", enforcerUid);
