@@ -1,173 +1,218 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, query, where, getDocs, collection, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Initialize Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyAuH9VHIHMBwrTOaUg2MZau4qsCpbVFSn4",
-    authDomain: "ticketforce-5ac87.firebaseapp.com",
-    projectId: "ticketforce-5ac87",
-    storageBucket: "ticketforce-5ac87.appspot.com",
-    messagingSenderId: "185677887310",
-    appId: "1:185677887310:android:5c2d30b29f40ee6063901f"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    // Initialize Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAuH9VHIHMBwrTOaUg2MZau4qsCpbVFSn4",
+        authDomain: "ticketforce-5ac87.firebaseapp.com",
+        projectId: "ticketforce-5ac87",
+        storageBucket: "ticketforce-5ac87.appspot.com",
+        messagingSenderId: "185677887310",
+        appId: "1:185677887310:android:5c2d30b29f40ee6063901f"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-// Reference to the "Record" collection
-const recordCollection = collection(db, "Record");
-
-// Retrieve all documents from the "Record" collection
-const querySnapshot = await getDocs(recordCollection);
-
-// Access the table body of the second table to append rows
-const tableBody2 = document.getElementById("tableBody").getElementsByTagName("tbody")[0];
-
-// Initialize total collected fee
-let totalCollectedFee = 0;
-
-// Check if there is at least one document in the collection
-if (!querySnapshot.empty) {
-    // Loop through each document in the collection
-    querySnapshot.forEach(async (doc) => {
-        // Get the data from the current document
-        const docData = doc.data();
-
-        const enforcerUid = docData.uid;
-
-        // Reference to the "enforcers" collection
-        const enforcersCollection = collection(db, "enforcers");
-
-        // Query to find the enforcer with the matching uid
-        const enforcerQuery = query(enforcersCollection, where("uid", "==", enforcerUid));
-        const enforcerQuerySnapshot = await getDocs(enforcerQuery);
-
-        // Check if there is at least one matching enforcer
-        if (!enforcerQuerySnapshot.empty) {
-            const matchingEnforcer = enforcerQuerySnapshot.docs[0].data();
-            const enforcerName = `${matchingEnforcer.firstname} ${matchingEnforcer.lastname}`;
-
-            const driverName = docData.name;
-            const driverStatus = docData.status;
-
-            const timestamp = docData.dateTime.toMillis(); // Convert timestamp to milliseconds
-            const formattedDate = new Date(timestamp).toLocaleDateString();
-
-            const violationsArray = docData.violations || [];
-
-            // Initialize total violation amount for each document
-            let totalViolationAmount = 0;
-
-            // Create a new table row and cells for the second table for each violation
-            violationsArray.forEach((violation) => {
-                const newRow2 = tableBody2.insertRow(-1);
-                const dateCell2 = newRow2.insertCell(0);
-                const enforcerCell2 = newRow2.insertCell(1);
-                const violationCell = newRow2.insertCell(2);
-                const violationFeeCell = newRow2.insertCell(3);
-                const paymentDateCell = newRow2.insertCell(4);
-                const collectedFeeCell = newRow2.insertCell(5);
-                const remarksCell = newRow2.insertCell(6);
-
-                // Set the text content of the cells for the second table
-                dateCell2.textContent = formattedDate;
-                enforcerCell2.textContent = enforcerName;
-                violationCell.textContent = violation["Name of Violation"];
-                violationFeeCell.textContent = violation["Amount"];
-                paymentDateCell.textContent = formattedDate;
-
-                const collectedFee = parseFloat(violation["Amount"]); // Convert to a number
-                collectedFeeCell.textContent = collectedFee.toFixed(2); // Replace with actual data
-                totalCollectedFee += collectedFee; // Update total collected fee
-
-                remarksCell.textContent = driverStatus; // Replace with actual data
-            });
-
-            // Display the total violation amount for each document
-            console.log(`Total Violation Amount for ${driverName}: $${totalViolationAmount.toFixed(2)}`);
-        } else {
-            console.error("No matching enforcer found for uid:", enforcerUid);
-        }
-    });
-
-    // Display the total collected fee
-    document.getElementById("total").textContent = `TOTAL: $${totalCollectedFee.toFixed(2)}`;
-} else {
-    console.error("No documents found in the 'Record' collection.");
-}
-
-
-
-
-
-
-
-
-// Function to fetch and display data based on date range
-async function fetchDataAndDisplay(startDate, endDate) {
     // Reference to the "Record" collection
-    const recordCollection = collection(db, "Record");
+    const recordCollection = collection(db, 'Record');
 
-    // Query to retrieve data within the specified date range
-    const dateFilteredQuery = query(recordCollection, where("dateTime", ">=", new Date(startDate)), where("dateTime", "<=", new Date(endDate)));
-    const querySnapshot = await getDocs(dateFilteredQuery);
+    // Create a query to get documents where 'uid' field exists 
+    const querySnapshot = await getDocs(query(recordCollection, where('ticketNumber', '!=', null)));
+    // Reference to the table body
+    const tableBody = document.querySelector('#tableBody tbody');
+    const totalParagraph = document.querySelector('#total');
+    let totalPaymentAmount = 0;
 
-    // Access the table body to append rows
-    const tableBody = document.getElementById("tableBody").getElementsByTagName("tbody")[0];
-    tableBody.innerHTML = ""; // Clear existing rows
+    // Loop through the documents and perform the desired operations
+    for (const doc of querySnapshot.docs) {
+        const formattedDate = doc.data().dateTime.toDate().toLocaleDateString();
+        const uid = doc.data().uid;
 
-    // Loop through each document in the collection
-    querySnapshot.forEach(async (doc) => {
-        const docData = doc.data();
-        const enforcerUid = docData.uid;
-
-        // Reference to the "enforcers" collection
-        const enforcersCollection = collection(db, "enforcers");
-
-        // Query to find the enforcer with the matching uid
-        const enforcerQuery = query(enforcersCollection, where("uid", "==", enforcerUid));
-        const enforcerQuerySnapshot = await getDocs(enforcerQuery);
-
-        // Check if there is at least one matching enforcer
-        if (!enforcerQuerySnapshot.empty) {
-            const matchingEnforcer = enforcerQuerySnapshot.docs[0].data();
-            const enforcerName = `${matchingEnforcer.firstname} ${matchingEnforcer.lastname}`;
-            const driverName = docData.name;
-            const driverStatus = docData.status;
-            const timestamp = docData.dateTime.toMillis(); // Convert timestamp to milliseconds
-            const formattedDate = new Date(timestamp).toLocaleDateString();
-
-            const violationsArray = docData.violations || [];
-
-            // Create a new table row and cells for the second table for each violation
-            violationsArray.forEach((violation) => {
-                const newRow2 = tableBody2.insertRow(-1);
-                const dateCell2 = newRow2.insertCell(0);
-                const enforcerCell2 = newRow2.insertCell(1);
-                const violationCell = newRow2.insertCell(2);
-                const violationFeeCell = newRow2.insertCell(3);
-                const paymentDateCell = newRow2.insertCell(4);
-                const collectedFeeCell = newRow2.insertCell(5);
-                const remarksCell = newRow2.insertCell(6);
-
-                // Set the text content of the cells for the second table
-                dateCell2.textContent = formattedDate;
-                enforcerCell2.textContent = enforcerName;
-                violationCell.textContent = violation["Name of Violation"];
-                violationFeeCell.textContent = violation["Amount"];
-                paymentDateCell.textContent = formattedDate;
-
-                const collectedFee = parseFloat(violation["Amount"]); // Convert to a number
-                collectedFeeCell.textContent = collectedFee.toFixed(2); // Replace with actual data
-                totalCollectedFee += collectedFee; // Update total collected fee
-
-                remarksCell.textContent = driverStatus; // Replace with actual data
-            });
-        } else {
-            console.error("No matching enforcer found for uid:", enforcerUid);
+        // Check if there's a matching document in the "enforcers" collection
+        const enforcerQuerySnapshot = await getDocs(query(collection(db, 'enforcers'), where('uid', '==', uid)));
+        
+        // Retrieve the enforcer's name if a match is found
+        let enforcerName = '';
+        if (enforcerQuerySnapshot.size > 0) {
+            const enforcerfName = enforcerQuerySnapshot.docs[0].data().firstname || '';
+            const enforcerlName = enforcerQuerySnapshot.docs[0].data().lastname || '';
+            enforcerName = enforcerfName + ' ' + enforcerlName;
         }
-    });
-}
+
+        // Handle the violations array
+        doc.data().violations.forEach((violation) => {
+            if ('paymentAmount' in doc.data()) {
+                // Increment the total paymentAmount
+                totalPaymentAmount += parseFloat(doc.data().paymentAmount);
+            }
+
+            // Create a new row for each combination of 'Amount' and 'Name of Violation'
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${formattedDate}</td>
+                <td>${enforcerName}</td>
+                <td>${violation['Name of Violation']}</td>
+                <td>${violation.Amount}</td>
+                <td>${doc.data().dateOfPayment}</td>
+                <td>${doc.data().paymentAmount}</td>
+                <td>${doc.data().status}</td>
+            `;
+            
+            // Append the row to the table body
+            tableBody.appendChild(newRow);
+        });
+    }console.log('Total Payment Amount:', totalPaymentAmount);
+    totalParagraph.textContent = `TOTAL: \u20B1 ${totalPaymentAmount.toFixed(2)}`;
+
+
+
+
+
+
+    
+
+
+
+
+    async function fetchDataAndDisplay(startDate, endDate) {
+        // Clear existing rows from the table
+        tableBody.innerHTML = '';
+    
+        // Array to store rows
+        const rows = [];
+    
+        try {
+            // Query to retrieve data within the specified date range
+            const dateFilteredQuery = query(recordCollection, 
+                where("dateTime", ">=", new Date(startDate)), 
+                where("dateTime", "<=", new Date(endDate))
+            );
+    
+            // Fetch documents based on the date range
+            const querySnapshot = await getDocs(dateFilteredQuery);
+    
+            // Loop through each document in the collection
+            for (const doc of querySnapshot.docs) {
+                const timestamp = doc.data().dateTime.toMillis();
+                const formattedDate = new Date(timestamp).toLocaleDateString();
+    
+                // Check if the document has the 'ticketNumber' field
+                if (!doc.data().ticketNumber) {
+                    continue; // Skip this row if 'ticketNumber' is not present
+                }
+    
+                const uid = doc.data().uid;
+    
+                // Check if there's a matching document in the "enforcers" collection
+                const enforcerQuerySnapshot = await getDocs(query(collection(db, 'enforcers'), where('uid', '==', uid)));
+    
+                // Retrieve the enforcer's name if a match is found
+                let enforcerName = '';
+                if (enforcerQuerySnapshot.size > 0) {
+                    const enforcerfName = enforcerQuerySnapshot.docs[0].data().firstname || '';
+                    const enforcerlName = enforcerQuerySnapshot.docs[0].data().lastname || '';
+                    enforcerName = enforcerfName + ' ' + enforcerlName;
+                }
+    
+                // Handle the violations array
+                doc.data().violations.forEach((violation) => {
+                    // Create a new row for each combination of 'Amount' and 'Name of Violation'
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td>${enforcerName}</td>
+                        <td>${violation['Name of Violation']}</td>
+                        <td>${violation.Amount}</td>
+                        <td>${doc.data().dateOfPayment || ''}</td>
+                        <td>${doc.data().paymentAmount || ''}</td>
+                        <td>${doc.data().status || ''}</td>
+                    `;
+    
+                    // Push the row to the array
+                    rows.push({ date: formattedDate, row: newRow });
+                });
+            }
+    
+            // Sort the rows based on the date
+            rows.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+            // Calculate and display the total payment amount
+            const totalPaymentAmount = rows.reduce((total, rowObj) => {
+                const paymentAmount = parseFloat(rowObj.row.cells[5].textContent);
+                return isNaN(paymentAmount) ? total : total + paymentAmount;
+            }, 0);
+    
+            console.log('Total Payment Amount:', totalPaymentAmount);
+            totalParagraph.textContent = `TOTAL: \u20B1 ${totalPaymentAmount.toFixed(2)}`;
+    
+            // Append sorted rows to the table body
+            rows.forEach((rowObj) => {
+                tableBody.appendChild(rowObj.row);
+            });
+        } catch (error) {
+            console.error("Error fetching and displaying data:", error);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+// Attach event listeners to Flatpickr inputs
+const flatpickrInput = flatpickr("#flatpickrInput", {
+    onChange: (selectedDates) => {
+        const startDate = selectedDates[0] ? selectedDates[0].toISOString() : null;
+        const endDate = flatpickrInput2.selectedDates[0] ? flatpickrInput2.selectedDates[0].toISOString() : null;
+        fetchDataAndDisplay(startDate, endDate);
+    },
+});
+
+const flatpickrInput2 = flatpickr("#flatpickrInput2", {
+    onChange: (selectedDates) => {
+        const startDate = flatpickrInput.selectedDates[0] ? flatpickrInput.selectedDates[0].toISOString() : null;
+        const endDate = selectedDates[0] ? selectedDates[0].toISOString() : null;
+        fetchDataAndDisplay(startDate, endDate);
+    },
+});
+
+// Initial call to fetchDataAndDisplay when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    const startDate = flatpickrInput.selectedDates[0] ? flatpickrInput.selectedDates[0].toISOString() : null;
+    const endDate = flatpickrInput2.selectedDates[0] ? flatpickrInput2.selectedDates[0].toISOString() : null;
+    fetchDataAndDisplay(startDate, endDate);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function printToPDF() {
     // Select the element containing the table (modify the selector if needed)
@@ -215,7 +260,7 @@ function printToPDF() {
 
 // Attach an event listener to the "PRINT" button to trigger data fetching and display
 document.getElementById("print").addEventListener("click", () => {
-    fetchDataAndDisplay();
+   
     printToPDF(); // Print to PDF after fetching and displaying data
 });
 
@@ -224,27 +269,3 @@ document.getElementById("print").addEventListener("click", () => {
 
 
 
-
-// Attach event listeners to Flatpickr inputs
-const flatpickrInput = flatpickr("#flatpickrInput", {
-    onChange: (selectedDates) => {
-        const startDate = selectedDates[0] ? selectedDates[0].toISOString() : null;
-        const endDate = flatpickrInput2.selectedDates[0] ? flatpickrInput2.selectedDates[0].toISOString() : null;
-        fetchDataAndDisplay(startDate, endDate);
-    },
-});
-
-const flatpickrInput2 = flatpickr("#flatpickrInput2", {
-    onChange: (selectedDates) => {
-        const startDate = flatpickrInput.selectedDates[0] ? flatpickrInput.selectedDates[0].toISOString() : null;
-        const endDate = selectedDates[0] ? selectedDates[0].toISOString() : null;
-        fetchDataAndDisplay(startDate, endDate);
-    },
-});
-
-// Initial call to fetchDataAndDisplay when the page loads
-document.addEventListener("DOMContentLoaded", () => {
-    const startDate = flatpickrInput.selectedDates[0] ? flatpickrInput.selectedDates[0].toISOString() : null;
-    const endDate = flatpickrInput2.selectedDates[0] ? flatpickrInput2.selectedDates[0].toISOString() : null;
-    fetchDataAndDisplay(startDate, endDate);
-});
