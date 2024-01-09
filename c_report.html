@@ -15,7 +15,9 @@
   <link rel="stylesheet" href="home.css">
 </head>
 <body>  
-<div id="main">             
+<div id="main">     
+  
+  
     <div id="mySidebar" class="sidebar">
         <span class="closebtn" onclick="closeNav()">×</span>
         <img src="personIcon.svg">
@@ -27,6 +29,8 @@
         <a href="transactions.html">TRANSACTION</a> 
         <a href="c_report.html">REPORT</a>
       </div>
+
+
 
     <div class="nav-bar">
                     <button class="openbtn" onclick="openNav()">☰</button>
@@ -90,9 +94,19 @@
 </div>
 
 
+
+<script>
+  
+  function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  }
+  function openNav() {
+    document.getElementById("mySidebar").style.width = "310px";
+  }
+</script>
+
 <script type="module" src="router.js"></script>
 <script type="module" src="report.js"></script>
-<script src="sidebar.js"></script>
-<script src="calendar.js"></script>
 </body>
 </html> 
