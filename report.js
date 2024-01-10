@@ -40,12 +40,17 @@
             enforcerName = enforcerfName + ' ' + enforcerlName;
         }
 
-        // Handle the violations array
+
+        let totalViolationAmount = 0;
+
         doc.data().violations.forEach((violation) => {
             if ('paymentAmount' in doc.data()) {
-                // Increment the total paymentAmount
-                totalPaymentAmount += parseFloat(doc.data().paymentAmount);
-            }
+                totalViolationAmount += violation.Amount;   
+            }  else {
+                totalViolationAmount += violation.Amount;
+                
+            }  
+        });
             const paidDate = doc.data().dateOfPayment ? new Date(doc.data().dateOfPayment.toMillis()).toLocaleDateString() : '';
 
             // Create a new row for each combination of 'Amount' and 'Name of Violation'
@@ -53,17 +58,24 @@
             newRow.innerHTML = `
                 <td>${formattedDate}</td>
                 <td>${enforcerName}</td>
-                <td>${violation['Name of Violation']}</td>
-                <td>${violation.Amount}</td>
+                <td>${doc.data().name}</td>
+                <td>${totalViolationAmount}</td>
                 <td>${paidDate}</td>
                 <td>${doc.data().paymentAmount}</td>
                 <td>${doc.data().status}</td>
             `;
+           
+            totalPaymentAmount += isNaN(doc.data().paymentAmount) ? 0 : doc.data().paymentAmount;
             
             // Append the row to the table body
             tableBody.appendChild(newRow);
-        });
-    }console.log('Total Payment Amount:', totalPaymentAmount);
+      
+    }
+    
+    console.log(totalPaymentAmount);
+    
+    
+    console.log('Total Payment Amount:', totalPaymentAmount);
     totalParagraph.textContent = `TOTAL: \u20B1 ${totalPaymentAmount.toFixed(2)}`;
 
 
@@ -116,25 +128,35 @@
                     enforcerName = enforcerfName + ' ' + enforcerlName;
                 }
     
-                // Handle the violations array
+                let totalViolationAmount = 0;
+
                 doc.data().violations.forEach((violation) => {
+                    if ('paymentAmount' in doc.data()) {
+                        totalViolationAmount += violation.Amount;   
+                    }  else {
+                        totalViolationAmount += violation.Amount;
+                        
+                    }  
+                });
                     const paidDate = doc.data().dateOfPayment ? new Date(doc.data().dateOfPayment.toMillis()).toLocaleDateString() : '';
+
 
                     // Create a new row for each combination of 'Amount' and 'Name of Violation'
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
-                        <td>${formattedDate}</td>
-                        <td>${enforcerName}</td>
-                        <td>${violation['Name of Violation']}</td>
-                        <td>${violation.Amount}</td>
-                        <td>${paidDate}</td>
-                        <td>${doc.data().paymentAmount}</td>
-                        <td>${doc.data().status}</td>
-                    `;
-    
-                    // Push the row to the array
+                    <td>${formattedDate}</td>
+                    <td>${enforcerName}</td>
+                    <td>${doc.data().name}</td>
+                    <td>${totalViolationAmount}</td>
+                    <td>${paidDate}</td>
+                    <td>${doc.data().paymentAmount}</td>
+                    <td>${doc.data().status}</td>
+                `;
+               
+                    
                     rows.push({ date: formattedDate, row: newRow });
-                });
+                    
+                
             }
     
             // Sort the rows based on the date
@@ -144,6 +166,7 @@
             const totalPaymentAmount = rows.reduce((total, rowObj) => {
                 const paymentAmount = parseFloat(rowObj.row.cells[5].textContent);
                 return isNaN(paymentAmount) ? total : total + paymentAmount;
+               
             }, 0);
     
             console.log('Total Payment Amount:', totalPaymentAmount);
