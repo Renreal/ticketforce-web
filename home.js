@@ -13,7 +13,7 @@
 
         
         /// Import Firestore functions from Firebase Firestore
-        import { getFirestore, query, where, getDocs, collection, deleteDoc, doc} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, query, where, getDocs, collection, orderBy} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
 
 
@@ -21,20 +21,19 @@
       const app = initializeApp(firebaseConfig);
      const db = getFirestore(app);
         
-     
 // Reference to the "Record" collection
 const recordCollection = collection(db, "Record");
 
-// Retrieve all documents from the "Record" collection
-const querySnapshot = await getDocs(recordCollection);
+// Retrieve all documents from the "Record" collection and order them by the timestamp in descending order
+const querySnapshot = await getDocs(query(recordCollection, orderBy("dateTime", "desc")));
 
 // Access the table body to append rows
 const tableBody = document.getElementById("tbl_home").getElementsByTagName("tbody")[0];
-    let counter = 0;
+let counter = 0;
 
 // Check if there is at least one document in the collection
 if (!querySnapshot.empty) {
-    // Loop through each document in the collection
+    // Loop through each document in the sorted collection
     querySnapshot.forEach(async (doc) => {
         counter++;
 
@@ -52,8 +51,6 @@ if (!querySnapshot.empty) {
         if (!enforcerQuerySnapshot.empty) {
             const matchingEnforcer = enforcerQuerySnapshot.docs[0].data();
             const enforcerName = `${matchingEnforcer.firstname} ${matchingEnforcer.lastname}`;
-            
-
 
             const driverName = docData.name;
             const driverStatus = docData.status;
@@ -77,7 +74,8 @@ if (!querySnapshot.empty) {
             console.error("No matching enforcer found for uid:", enforcerUid);
         }
     });
-} else {
+}
+ else {
     console.error("No documents found in the 'Record' collection.");
 }
 

@@ -1,5 +1,5 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, where, getDoc, doc, orderBy} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     // Initialize Firebase
     const firebaseConfig = {
@@ -16,8 +16,11 @@
     // Reference to the "Record" collection
     const recordCollection = collection(db, 'Record');
 
-    // Create a query to get documents where 'uid' field exists 
-    const querySnapshot = await getDocs(query(recordCollection, where('ticketNumber', '!=', null)));
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+const querySnapshot = await getDocs(query(recordCollection, orderBy("dateTime", "desc")));
+   
+   
     // Reference to the table body
     const tableBody = document.querySelector('#tableBody tbody');
     const totalParagraph = document.querySelector('#total');
@@ -25,8 +28,9 @@
 
     // Loop through the documents and perform the desired operations
     for (const doc of querySnapshot.docs) {
-        const formattedDate = doc.data().dateTime.toDate().toLocaleDateString();
         
+        const dateObject = doc.data().dateTime.toDate();
+        const formattedDate = `${dateObject.getMonth() + 1}/${dateObject.getDate()}/${dateObject.getFullYear()}`;
         const uid = doc.data().uid;
 
         // Check if there's a matching document in the "enforcers" collection
@@ -64,6 +68,7 @@
                 <td>${doc.data().paymentAmount}</td>
                 <td>${doc.data().status}</td>
             `;
+            console.log(formattedDate);
            
             totalPaymentAmount += isNaN(doc.data().paymentAmount) ? 0 : doc.data().paymentAmount;
             

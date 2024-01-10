@@ -15,7 +15,6 @@
     // ...
 
   // ...
-
   const vioNameInput = document.getElementById("vioName");
   const amountInput = document.getElementById("amountInput");
   const saveBtn = document.getElementById("btnSave");
@@ -43,58 +42,65 @@
       } else {
         querySnapshot = await getDocs(violationsRef);
       }
-   // Clear existing content in the container
-   resultsContainer.innerHTML = '';
-
-   // Iterate over the documents and create HTML elements
-   querySnapshot.forEach((doc) => {
-     const data = doc.data();
-
-     // Create HTML elements
-     const violationElement = document.createElement("div");
-     violationElement.className = "sResults";
-
-     const vTypeElement = document.createElement("p");
-     vTypeElement.id = "vType";
-     vTypeElement.textContent = data.name;
-
-     const subconElement = document.createElement("div");
-     subconElement.className = "subcon";
-
-     const priceElement = document.createElement("p");
-     priceElement.id = "price";
-     priceElement.textContent = "P" + data.amount;
-
-     const searchIconElement = document.createElement("i");
-     searchIconElement.className = "fa fa-edit";
-
-     // Add click event listener to the search icon
-     searchIconElement.addEventListener("click", function () {
-       console.log("Clicked on id:", doc.id);
-       hideModal();
-
-       // Populate the input fields with the clicked violation's data
-       vioNameInput.value = data.name;
-       amountInput.value = data.amount;
-
-       // Store the selected document ID
-       selectedDocId = doc.id;
-     });
-
-       // Append elements to the container
-       subconElement.appendChild(priceElement);
-       subconElement.appendChild(searchIconElement);
- 
-       violationElement.appendChild(vTypeElement);
-       violationElement.appendChild(subconElement);
- 
-       resultsContainer.appendChild(violationElement);
-     });
-   } catch (error) {
-     console.error("Error fetching Violations data:", error);
-   }
- }
-
+  
+      // Sort the querySnapshot by violation name
+      const sortedQuerySnapshot = querySnapshot.docs.sort((a, b) => {
+        const nameA = a.data().name.toUpperCase(); // ignore case
+        const nameB = b.data().name.toUpperCase(); // ignore case
+        return nameA.localeCompare(nameB);
+      });
+  
+      // Clear existing content in the container
+      resultsContainer.innerHTML = '';
+  
+      // Iterate over the sorted documents and create HTML elements
+      sortedQuerySnapshot.forEach((doc) => {
+        const data = doc.data();
+  
+        // Create HTML elements
+        const violationElement = document.createElement("div");
+        violationElement.className = "sResults";
+  
+        const vTypeElement = document.createElement("p");
+        vTypeElement.id = "vType";
+        vTypeElement.textContent = data.name;
+  
+        const subconElement = document.createElement("div");
+        subconElement.className = "subcon";
+  
+        const priceElement = document.createElement("p");
+        priceElement.id = "price";
+        priceElement.textContent = "P" + data.amount;
+  
+        const searchIconElement = document.createElement("i");
+        searchIconElement.className = "fa fa-edit";
+  
+        // Add click event listener to the search icon
+        searchIconElement.addEventListener("click", function () {
+          console.log("Clicked on id:", doc.id);
+          hideModal();
+  
+          // Populate the input fields with the clicked violation's data
+          vioNameInput.value = data.name;
+          amountInput.value = data.amount;
+  
+          // Store the selected document ID
+          selectedDocId = doc.id;
+        });
+  
+        // Append elements to the container
+        subconElement.appendChild(priceElement);
+        subconElement.appendChild(searchIconElement);
+  
+        violationElement.appendChild(vTypeElement);
+        violationElement.appendChild(subconElement);
+  
+        resultsContainer.appendChild(violationElement);
+      });
+    } catch (error) {
+      console.error("Error fetching Violations data:", error);
+    }
+  }
 // ...
 // Add e// ...
 
@@ -130,14 +136,27 @@ saveBtn.addEventListener("click", async function () {
 });
 
 
+
+
+
     displayViolations();
 
-    // Add event listener for search input changes
     const searchInput = document.getElementById("vSearch");
     searchInput.addEventListener("input", function () {
       const searchTerm = searchInput.value.trim();
       displayViolations(searchTerm);
     });
+
+
+
+
+
+
+
+
+
+
+
 
     // Add event listener for save button click
     saveBtn.addEventListener("click", async function () {
