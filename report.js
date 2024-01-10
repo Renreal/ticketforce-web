@@ -164,10 +164,10 @@ const querySnapshot = await getDocs(query(recordCollection, orderBy("dateTime", 
                 
             }
     
-            // Sort the rows based on the date
-            rows.sort((a, b) => new Date(a.date) - new Date(b.date));
-    
-            // Calculate and display the total payment amount
+            // Sort the rows based on the date in descending order
+            rows.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+              // Calculate and display the total payment amount
             const totalPaymentAmount = rows.reduce((total, rowObj) => {
                 const paymentAmount = parseFloat(rowObj.row.cells[5].textContent);
                 return isNaN(paymentAmount) ? total : total + paymentAmount;
