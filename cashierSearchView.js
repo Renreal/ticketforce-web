@@ -75,10 +75,10 @@ const searchEnforcers = async () => {
 
     if (querySnapshots.length === 0 || querySnapshots.every(snapshot => snapshot.size === 0)) {
       // Display a message if no results are found
-      searchResults.innerHTML = "No matching enforcers found.";
+      searchResults.innerHTML = "No matching violator found.";
     }
   } catch (error) {
-    console.error("Error searching enforcers:", error);
+    console.error("Error searching violator:", error);
   }
 };
 
