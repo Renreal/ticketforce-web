@@ -54,7 +54,8 @@
            window.location.href ="index.html";
                   } else if (isCashier) {
              alert("Welcome!");
-            window.location.href = "C_home.html";
+            window.location.href = "cashiersHome.html";
+           
             // You can choose to handle the cashier case differently, e.g., show an error message.
                 } else {
                     console.log("User not found in 'admins' or 'cashiers' collection.");
