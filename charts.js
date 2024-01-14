@@ -37,19 +37,20 @@ export let test = paidStatus;
   });
 
 
-  const xVal = [1, 2, 3];
+
+  const xVal = [1, 2,  3];
 
       new Chart("myChart2", {
         type: "line",
         data: {
           labels: xVal,
           datasets: [{
-            data: [1, 2, 3],
+            data: [1,2,countervalue],
             borderColor: "black",
             pointBorderColor: "black", // Set the point border color to black
             fill: false
           }, {
-            data: [5, 6, 17],
+            data: [1, 2,paidStatus],
             borderColor: "yellow",
             pointBorderColor: "yellow", // Set the point border color to yellow
             fill: false
@@ -91,6 +92,27 @@ export let test = paidStatus;
         }
       });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
 
       function updateDateTime() {
         const currentDate = new Date();

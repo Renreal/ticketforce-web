@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, query, where, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, query, where, getDocs, collection,orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -17,9 +17,10 @@ const db = getFirestore(app);
 // Reference to the "Record" collection
 const recordCollection = collection(db, "Record");
 
-// Retrieve documents where the status is 'paid'
-const paidStatusQuery = query(recordCollection, where("status", "==", "paid"));
+// Retrieve documents where the status is 'paid' and sort them by dateOfPayment
+const paidStatusQuery = query(recordCollection, where("status", "==", "paid"), orderBy("dateOfPayment", "desc"));
 const paidStatusSnapshot = await getDocs(paidStatusQuery);
+
 
 // Access the transaction container to append transaction items
 const transactionContainer = document.querySelector(".Tcontainer");
@@ -33,7 +34,7 @@ paidStatusSnapshot.forEach((doc) => {
     if (docData.status === 'paid') {
         const driverName = docData.name;
         const paymentAmount = docData.paymentAmount;
-        const timestamp = docData.dateTime.toMillis(); // Convert timestamp to milliseconds
+        const timestamp = docData.dateOfPayment.toMillis(); // Convert timestamp to milliseconds
         const formattedDate = new Date(timestamp).toLocaleDateString();
         const formattedTime = new Date(timestamp).toLocaleTimeString();
 

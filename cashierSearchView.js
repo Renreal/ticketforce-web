@@ -24,7 +24,7 @@ function isInteger(value) {
   return /^\d+$/.test(value);
 }
 
-// Function to search for enforcers by ID or firstname
+// Function to search for people by ticket or firstname
 const searchEnforcers = async () => {
   const searchTerm = searchInput.value.trim();
 
@@ -56,17 +56,22 @@ const searchEnforcers = async () => {
 
   try {
     const querySnapshots = await Promise.all(queryPromises);
-
+    let foundUnpaidTicket = false;
     querySnapshots.forEach((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const data = doc.data();
 
-        // Check if the document has a 'ticketNumber' field before displaying
-        if ('ticketNumber' in data) {
+         // Check if the document has a 'ticketNumber' field and 'status' is not 'paid' before displaying
+         if ('ticketNumber' in data && (!('status' in data) || data.status !== 'paid')) {
           displayResult(data);
+          foundUnpaidTicket = true;
         }
       });
     });
+    if (!foundUnpaidTicket) {
+      // Display a message if no unpaid tickets are found
+      searchResults.innerHTML = "No unpaid ticket found for this name or ticket number.";
+    }
 
     if (querySnapshots.length === 0 || querySnapshots.every(snapshot => snapshot.size === 0)) {
       // Display a message if no results are found
@@ -193,7 +198,7 @@ document.getElementById('btnOk').addEventListener('click', async () => {
       });
 
       alert('Payment successfully processed.');
-
+     
       // Listen for real-time updates to the document
       const unsubscribe = onSnapshot(querySnapshot.docs[0].ref, (updatedDoc) => {
           // Refresh the displayed data based on the updated document
@@ -201,6 +206,7 @@ document.getElementById('btnOk').addEventListener('click', async () => {
           // Unsubscribe from further updates
           unsubscribe();
       });
+    location.reload();
   } catch (error) {
       console.error("Error updating 'Record' document:", error);
   }

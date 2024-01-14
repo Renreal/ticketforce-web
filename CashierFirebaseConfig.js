@@ -50,11 +50,11 @@
            getNameByUid(user.uid);
            // Redirect based on the collection
            if (isAdmin) {
-            alert("Welcome!");
-            window.location.href = "home.html";
+           alert("Admins are not permitted to view this page");
+           window.location.href ="index.html";
                   } else if (isCashier) {
-            alert("Cashiers are not allowed to access this page.");
-            window.location.href = "index.html";
+             alert("Welcome!");
+            window.location.href = "C_home.html";
             // You can choose to handle the cashier case differently, e.g., show an error message.
                 } else {
                     console.log("User not found in 'admins' or 'cashiers' collection.");
@@ -69,8 +69,8 @@
            if (errorCode === "auth/invalid-email") {
                alert("Please enter a valid email");
            }
-           else if (errorCode === "auth/invalid-login-credentials") {
-               alert("You have entered a wrong email or password");
+           if (errorCode === "auth/invalid-login-credentials") {
+               alert("You have entered a wrong password");
            } else {
                console.log("Error: " + errorMessage);
            }
@@ -78,7 +78,8 @@
    });
    
 
-   
+
+  
 const forgotPasswordSpan = document.getElementById('forgotPass');
 forgotPasswordSpan.addEventListener('click', () => {
     alert('Please contact the moderator at renreal.dev@gmail.com ');
