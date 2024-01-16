@@ -12,6 +12,8 @@ const firebaseConfig = {
   messagingSenderId: "389530136369",
   appId: "1:389530136369:web:2bf5bdcc84ebbc86474a10"
 }; */
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyAuH9VHIHMBwrTOaUg2MZau4qsCpbVFSn4",
   authDomain: "ticketforce-5ac87.firebaseapp.com",
