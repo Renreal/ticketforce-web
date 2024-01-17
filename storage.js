@@ -70,7 +70,7 @@ uploadButton.addEventListener("click", () => {
           .then((downloadURL) => {
             uploadedImage.src = downloadURL;
             const rawPassword = ID; // Assuming ID is the raw password
-            const password = `${rawPassword}2023Traffic`; // Append "20223Traffic" to the end
+            const password = `Enforcer@${rawPassword}`; // Append "20223Traffic" to the end
 
             createUserWithEmailAndPassword(auth, `${firstname.toLowerCase()}.${lastname.toLowerCase()}@enforcer.com`, password)
               .then((userCredential) => {
