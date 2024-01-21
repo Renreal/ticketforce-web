@@ -65,7 +65,7 @@
              console.log("User is logged in");
              getNameByUid(user.uid);
          } else {
-           window.location.href = "login.html";
+           window.location.href = "index.html";
              console.log("User logged out");
          }
      });
