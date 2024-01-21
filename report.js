@@ -46,12 +46,13 @@ const querySnapshot = await getDocs(query(recordCollection, orderBy("dateTime", 
 
 
         let totalViolationAmount = 0;
-
+        
         doc.data().violations.forEach((violation) => {
+            const amount = parseFloat(violation.amount);
             if ('paymentAmount' in doc.data()) {
-                totalViolationAmount += violation.Amount;   
+                totalViolationAmount += amount;   
             }  else {
-                totalViolationAmount += violation.Amount;
+                totalViolationAmount += amount;
                 
             }  
         });
@@ -77,145 +78,127 @@ const querySnapshot = await getDocs(query(recordCollection, orderBy("dateTime", 
       
     }
     
-    console.log(totalPaymentAmount);
-    
-    
+    console.log(totalPaymentAmount);    
     console.log('Total Payment Amount:', totalPaymentAmount);
     totalParagraph.textContent = `TOTAL: \u20B1 ${totalPaymentAmount.toFixed(2)}`;
 
 
 
+// Function to fetch data and display based on date range
+async function fetchDataAndDisplay(startDate, endDate) {
+    // Reference to the "Record" collection
+    const recordCollection = collection(db, 'Record');
 
+    // Parse the selected dates to Firestore timestamps
+    const startTimestamp = startDate ? new Date(startDate) : null;
+    const endTimestamp = endDate ? new Date(endDate) : null;
 
+    // Create a base query with orderBy
+    let baseQuery = query(recordCollection, orderBy("dateTime", "desc"));
 
-    
-
-
-
-
-    async function fetchDataAndDisplay(startDate, endDate) {
-        // Clear existing rows from the table
-        tableBody.innerHTML = '';
-    
-        // Array to store rows
-        const rows = [];
-    
-        try {
-            // Query to retrieve data within the specified date range
-            const dateFilteredQuery = query(recordCollection, 
-                where("dateTime", ">=", new Date(startDate)), 
-                where("dateTime", "<=", new Date(endDate))
-            );
-    
-            // Fetch documents based on the date range
-            const querySnapshot = await getDocs(dateFilteredQuery);
-    
-            // Loop through each document in the collection
-            for (const doc of querySnapshot.docs) {
-                const timestamp = doc.data().dateTime.toMillis();
-                const formattedDate = new Date(timestamp).toLocaleDateString();
-    
-                // Check if the document has the 'ticketNumber' field
-                if (!doc.data().ticketNumber) {
-                    continue; // Skip this row if 'ticketNumber' is not present
-                }
-    
-                const uid = doc.data().uid;
-    
-                // Check if there's a matching document in the "enforcers" collection
-                const enforcerQuerySnapshot = await getDocs(query(collection(db, 'enforcers'), where('uid', '==', uid)));
-    
-                // Retrieve the enforcer's name if a match is found
-                let enforcerName = '';
-                if (enforcerQuerySnapshot.size > 0) {
-                    const enforcerfName = enforcerQuerySnapshot.docs[0].data().firstname || '';
-                    const enforcerlName = enforcerQuerySnapshot.docs[0].data().lastname || '';
-                    enforcerName = enforcerfName + ' ' + enforcerlName;
-                }
-    
-                let totalViolationAmount = 0;
-
-                doc.data().violations.forEach((violation) => {
-                    if ('paymentAmount' in doc.data()) {
-                        totalViolationAmount += violation.Amount;   
-                    }  else {
-                        totalViolationAmount += violation.Amount;
-                        
-                    }  
-                });
-                    const paidDate = doc.data().dateOfPayment ? new Date(doc.data().dateOfPayment.toMillis()).toLocaleDateString() : '';
-
-
-                    // Create a new row for each combination of 'Amount' and 'Name of Violation'
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                    <td>${formattedDate}</td>
-                    <td>${enforcerName}</td>
-                    <td>${doc.data().name}</td>
-                    <td>${totalViolationAmount}</td>
-                    <td>${paidDate}</td>
-                    <td>${doc.data().paymentAmount}</td>
-                    <td>${doc.data().status}</td>
-                `;
-               
-                    
-                    rows.push({ date: formattedDate, row: newRow });
-                    
-                
-            }
-    
-            // Sort the rows based on the date in descending order
-            rows.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-              // Calculate and display the total payment amount
-            const totalPaymentAmount = rows.reduce((total, rowObj) => {
-                const paymentAmount = parseFloat(rowObj.row.cells[5].textContent);
-                return isNaN(paymentAmount) ? total : total + paymentAmount;
-               
-            }, 0);
-    
-            console.log('Total Payment Amount:', totalPaymentAmount);
-            totalParagraph.textContent = `TOTAL: \u20B1 ${totalPaymentAmount.toFixed(2)}`;
-    
-            // Append sorted rows to the table body
-            rows.forEach((rowObj) => {
-                tableBody.appendChild(rowObj.row);
-            });
-        } catch (error) {
-            console.error("Error fetching and displaying data:", error);
-        }
+    // Add where conditions based on the date range
+    if (startTimestamp) {
+        baseQuery = query(baseQuery, where("dateTime", ">=", startTimestamp));
     }
 
+    if (endTimestamp) {
+        // Adjust the end date to include the entire day
+        const endTimestampAdjusted = new Date(endTimestamp);
+        endTimestampAdjusted.setHours(23, 59, 59, 999);
+        baseQuery = query(baseQuery, where("dateTime", "<=", endTimestampAdjusted));
+    }
 
+    // Get the query snapshot
+    const querySnapshot = await getDocs(baseQuery);
+
+    // Reference to the table body
+    const tableBody = document.querySelector('#tableBody tbody');
+    const totalParagraph = document.querySelector('#total');
+    let totalPaymentAmount = 0;
+
+    // Clear existing rows from the table
+    tableBody.innerHTML = '';
+
+    // Loop through the documents and perform the desired operations
+    for (const doc of querySnapshot.docs) {
+        const dateObject = doc.data().dateTime.toDate();
+        const formattedDate = `${dateObject.getMonth() + 1}/${dateObject.getDate()}/${dateObject.getFullYear()}`;
+        const uid = doc.data().uid;
+
+        // Check if there's a matching document in the "enforcers" collection
+        const enforcerQuerySnapshot = await getDocs(query(collection(db, 'enforcers'), where('uid', '==', uid)));
+
+        // Retrieve the enforcer's name if a match is found
+        let enforcerName = '';
+        if (enforcerQuerySnapshot.size > 0) {
+            const enforcerfName = enforcerQuerySnapshot.docs[0].data().firstname || '';
+            const enforcerlName = enforcerQuerySnapshot.docs[0].data().lastname || '';
+            enforcerName = enforcerfName + ' ' + enforcerlName;
+        }
+
+        let totalViolationAmount = 0;
+
+        doc.data().violations.forEach((violation) => {
+            const amount = parseFloat(violation.amount);
+            if ('paymentAmount' in doc.data()) {
+                totalViolationAmount += amount;
+            } else {
+                totalViolationAmount += amount;
+            }
+        });
+        const paidDate = doc.data().dateOfPayment ? new Date(doc.data().dateOfPayment.toMillis()).toLocaleDateString() : '';
+
+        // Create a new row for each combination of 'Amount' and 'Name of Violation'
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${formattedDate}</td>
+            <td>${enforcerName}</td>
+            <td>${doc.data().name}</td>
+            <td>${totalViolationAmount}</td>
+            <td>${paidDate}</td>
+            <td>${doc.data().paymentAmount}</td>
+            <td>${doc.data().status}</td>
+        `;
+        console.log(formattedDate);
+
+        totalPaymentAmount += isNaN(doc.data().paymentAmount) ? 0 : doc.data().paymentAmount;
+
+        // Append the row to the table body
+        tableBody.appendChild(newRow);
+    }
+
+    console.log(totalPaymentAmount);
+    console.log('Total Payment Amount:', totalPaymentAmount);
+    totalParagraph.textContent = `TOTAL: \u20B1 ${totalPaymentAmount.toFixed(2)}`;
+}
+ 
 
 
 
 
 // Attach event listeners to Flatpickr inputs
 const flatpickrInput = flatpickr("#flatpickrInput", {
-    onChange: (selectedDates) => {
-        const startDate = selectedDates[0] ? selectedDates[0].toISOString() : null;
-        const endDate = flatpickrInput2.selectedDates[0] ? flatpickrInput2.selectedDates[0].toISOString() : null;
-        fetchDataAndDisplay(startDate, endDate);
-    },
+    onChange: handleDateRangeChange,
 });
 
 const flatpickrInput2 = flatpickr("#flatpickrInput2", {
-    onChange: (selectedDates) => {
-        const startDate = flatpickrInput.selectedDates[0] ? flatpickrInput.selectedDates[0].toISOString() : null;
-        const endDate = selectedDates[0] ? selectedDates[0].toISOString() : null;
-        fetchDataAndDisplay(startDate, endDate);
-    },
+    onChange: handleDateRangeChange,
 });
 
 // Initial call to fetchDataAndDisplay when the page loads
 document.addEventListener("DOMContentLoaded", () => {
+    fetchDataAndDisplay(
+        flatpickrInput.selectedDates[0] ? flatpickrInput.selectedDates[0].toISOString() : null,
+        flatpickrInput2.selectedDates[0] ? flatpickrInput2.selectedDates[0].toISOString() : null
+    );
+});
+
+// Function to handle date range changes
+function handleDateRangeChange(selectedDates, dateStr, instance) {
     const startDate = flatpickrInput.selectedDates[0] ? flatpickrInput.selectedDates[0].toISOString() : null;
     const endDate = flatpickrInput2.selectedDates[0] ? flatpickrInput2.selectedDates[0].toISOString() : null;
     fetchDataAndDisplay(startDate, endDate);
-});
-
-
+}
 
 
 

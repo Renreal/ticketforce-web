@@ -117,8 +117,9 @@ function displayResult(data) {
         // Log the name and other desired fields
         console.log(`Name: ${data.name}`);
         console.log(`Ticket No.: ${data.ticketNumber}`);
-        console.log(`Status: ${data.status}`); // Log the status field
-
+        console.log(`Status: ${data.status}`);
+        
+        
         // Update the vHeader with the document name
         const Dname = `${data.name}`;
         const vHeaderName = vioRecordsContainer.querySelector('.vHeader .name');
@@ -137,21 +138,25 @@ function displayResult(data) {
 
         let totalAmount = 0;
 
-        // Loop through each violation in the array and log its information
-        for (const violation of violationsArray) {
-          console.log(`- ${violation["Name of Violation"]}`);
+          // Loop through each violation in the array and log its information
+          for (const violation of violationsArray) {
+            console.log(`- ${violation["name"]}`);
+            
+            // Create an li element for each violation and append it to the list
+            const li = document.createElement('li');
+            li.textContent = `${violation["name"]}`;
+            recordsList.appendChild(li);
 
-          // Create an li element for each violation and append it to the list
-          const li = document.createElement('li');
-          li.textContent = `${violation["Name of Violation"]}`;
-          recordsList.appendChild(li);
+            // Convert the amount from string to number using parseFloat
+            const amount = parseFloat(violation.amount);
 
-          const li2 = document.createElement('li');
-          li2.textContent = ` ₱ ${violation.Amount}`;
-          amountList.appendChild(li2);
+            const li2 = document.createElement('li');
+            li2.textContent = ` ₱ ${amount.toFixed(2)}`; // Display amount with two decimal places
+            amountList.appendChild(li2);
 
-          totalAmount += violation.Amount;
-        }
+            totalAmount += amount;
+            console.log('total: ' + totalAmount);
+          }
 
         const totalAmountElement = document.getElementById('total');
         const tcktAmount = document.getElementById('amount') || document.querySelector('#amount');
@@ -162,7 +167,7 @@ function displayResult(data) {
           totalAmountElement.textContent = 'Total Amount = Paid';
           tcktAmount.textContent = 'Paid';
         } else {
-          totalAmountElement.textContent = `Total Amount = ₱ ${totalAmount}`;
+          totalAmountElement.textContent = `Total Amount = ₱ ` + totalAmount;
           tcktAmount.textContent = '₱' + totalAmount;
         }
 
