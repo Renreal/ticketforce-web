@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Counter</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #counter {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="counter">1</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Initialize the counter and last reset date from localStorage
+      let counterValue = parseInt(localStorage.getItem("counterValue")) || 1;
+      let lastResetDate = localStorage.getItem("lastResetDate");
+
+      // Update the counter display
+      updateCounter(counterValue);
+
+      // Set an interval to check for a new day and reset the counter
+      setInterval(function() {
+        if (!lastResetDate || isDifferentDay(new Date(lastResetDate), new Date())) {
+          // Save the current date in localStorage
+          localStorage.setItem("lastResetDate", new Date().toDateString());
+
+          // Reset the counter value to 0
+          localStorage.setItem("counterValue", "0");
+
+          // Update the counter display
+          updateCounter(0);
+        }
+      }, 1000); // Check every 1000 milliseconds (1 second)
+    });
+
+    function updateCounter(value) {
+      document.getElementById("counter").innerText = value;
+    }
+
+    function isDifferentDay(date1, date2) {
+      return date1.getDate() !== date2.getDate() ||
+             date1.getMonth() !== date2.getMonth() ||
+             date1.getFullYear() !== date2.getFullYear();
+    }
+  </script>
+</body>
+</html>

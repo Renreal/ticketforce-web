@@ -14,9 +14,7 @@
         
         /// Import Firestore functions from Firebase Firestore
         import { getFirestore, query, where, getDocs, collection, orderBy} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        
-
-
+      
         // Initialize Firebase auth and firestore
       const app = initializeApp(firebaseConfig);
      const db = getFirestore(app);
@@ -118,18 +116,45 @@ const paidStatusCount = await countPaidStatusDocumentsAndDisplay(transactionCont
 
 // Display the count or use it as needed
 console.log("Number of documents with 'paid' status:", paidStatusCount);
-
-// ... (rest of your existing code)
-
-  // Display the count or use it as needed
-  
   
   export const paidStatus = paidStatusCount;
   
 
 
 
-
-document.getElementById("counter").textContent = counter.toString();
+/* 
+document.getElementById("currentData").textContent = counter.toString(); */
 
 export const countervalue = counter;
+
+
+// Step 1: Get the start and end timestamps for the current date
+const currentDate = new Date();
+const startTimestamp = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0, 0);
+const endTimestamp = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1, 0, 0, 0, 0);
+let test = 0;
+// Step 2: Query Firestore to retrieve documents with a timestamp within the current date
+const dateQuery = query(recordCollection, where("dateTime", ">=", startTimestamp), where("dateTime", "<", endTimestamp));
+const dateQuerySnapshot = await getDocs(dateQuery);
+
+// Step 3: Display the retrieved data to the console or your webpage
+if (!dateQuerySnapshot.empty) {
+    dateQuerySnapshot.forEach(async (doc) => {
+        const timestamp = doc.data().dateTime.toMillis(); // Convert timestamp to milliseconds
+        const formattedDate = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            timeZone: 'UTC'  // Adjust the timezone if needed
+        }).format(timestamp);
+        test++;
+        console.log('Status:', doc.data());
+    });
+} else {
+    console.log("No documents found for the current date in the 'Record' collection.");
+}
+
+document.getElementById("currentData").textContent = test.toString();

@@ -1,43 +1,36 @@
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+   // Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, query, where, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAuH9VHIHMBwrTOaUg2MZau4qsCpbVFSn4",
-            authDomain: "ticketforce-5ac87.firebaseapp.com",
-            projectId: "ticketforce-5ac87",
-            storageBucket: "ticketforce-5ac87.appspot.com",
-            messagingSenderId: "185677887310",
-            appId: "1:185677887310:android:5c2d30b29f40ee6063901f"
-        };
-        // Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyAuH9VHIHMBwrTOaUg2MZau4qsCpbVFSn4",
+    authDomain: "ticketforce-5ac87.firebaseapp.com",
+    projectId: "ticketforce-5ac87",
+    storageBucket: "ticketforce-5ac87.appspot.com",
+    messagingSenderId: "185677887310",
+    appId: "1:185677887310:android:5c2d30b29f40ee6063901f"
+};
 
-        
-        /// Import Firestore functions from Firebase Firestore
-        import { getFirestore, query, where, getDocs, collection, deleteDoc, doc} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-
-        // Initialize Firebase auth and firestore
-      const app = initializeApp(firebaseConfig);
-     const db = getFirestore(app);
-        
-     
 // Reference to the "Record" collection
 const recordCollection = collection(db, "Record");
 
 // Retrieve all documents from the "Record" collection
 const querySnapshot = await getDocs(recordCollection);
-
+// Access the table body to append rows
 // Access the table body to append rows
 const tableBody = document.getElementById("tbl_home").getElementsByTagName("tbody")[0];
-    let counter = 0;
+let counter = 0;
+
 
 // Check if there is at least one document in the collection
 if (!querySnapshot.empty) {
     // Loop through each document in the collection
     querySnapshot.forEach(async (doc) => {
         counter++;
-
         // Get the data from the current document
         const docData = doc.data();
         const enforcerUid = docData.uid;
@@ -52,8 +45,6 @@ if (!querySnapshot.empty) {
         if (!enforcerQuerySnapshot.empty) {
             const matchingEnforcer = enforcerQuerySnapshot.docs[0].data();
             const enforcerName = `${matchingEnforcer.firstname} ${matchingEnforcer.lastname}`;
-            
-
 
             const driverName = docData.name;
             const driverStatus = docData.status;
@@ -79,6 +70,7 @@ if (!querySnapshot.empty) {
 } else {
     console.error("No documents found in the 'Record' collection.");
 }
+
 
 
 
@@ -124,11 +116,38 @@ async function countPaidStatusDocumentsAndDisplay() {
   console.log("Number of documents with 'paid' status:", paidStatusCount);
   
   export const paidStatus = paidStatusCount;
+  export const countervalue = counter;
+
+
+
   
+// Step 1: Get the start and end timestamps for the current date
+const currentDate = new Date();
+const startTimestamp = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0, 0);
+const endTimestamp = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1, 0, 0, 0, 0);
+let test = 0;
+// Step 2: Query Firestore to retrieve documents with a timestamp within the current date
+const dateQuery = query(recordCollection, where("dateTime", ">=", startTimestamp), where("dateTime", "<", endTimestamp));
+const dateQuerySnapshot = await getDocs(dateQuery);
 
+// Step 3: Display the retrieved data to the console or your webpage
+if (!dateQuerySnapshot.empty) {
+    dateQuerySnapshot.forEach(async (doc) => {
+        const timestamp = doc.data().dateTime.toMillis(); // Convert timestamp to milliseconds
+        const formattedDate = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            timeZone: 'UTC'  // Adjust the timezone if needed
+        }).format(timestamp);
+        test++;
+        console.log('Status:', doc.data());
+    });
+} else {
+    console.log("No documents found for the current date in the 'Record' collection.");
+}
 
-
-
-document.getElementById("counter").textContent = counter.toString();
-
-export const countervalue = counter;
+document.getElementById("currentData").textContent = test.toString();
