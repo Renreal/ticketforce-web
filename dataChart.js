@@ -41,12 +41,12 @@ console.log("Counter :", paidStatus);
         data: {
           labels: xVal,
           datasets: [{
-            data: [1, 2, countervalue],
+            data: [0, 2, countervalue],
             borderColor: "black",
             pointBorderColor: "black", // Set the point border color to black
             fill: false
           }, {
-            data: [1, 2, paidStatus],
+            data: [0, 1, paidStatus],
             borderColor: "yellow",
             pointBorderColor: "yellow", // Set the point border color to yellow
             fill: false
